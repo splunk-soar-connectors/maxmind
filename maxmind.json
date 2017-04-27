@@ -1,0 +1,131 @@
+{
+    "appid": "c566e153-3118-4033-abda-14dd9748c91a",
+    "name": "MaxMind",
+    "description": "This app provides ip geolocation with the included MaxMind database.",
+    "type": "information",
+    "publisher": "Phantom",
+    "main_module": "maxmind_connector.pyc",
+    "app_version": "1.2.16",
+    "utctime_updated": "2017-04-12T16:49:46.000000Z",
+    "package_name": "phantom_maxmind",
+    "product_name": "GeoIP2",
+    "product_vendor": "MaxMind",
+    "product_version_regex": ".*",
+    "min_phantom_version": "1.2.283",
+    "configuration": {},
+    "consolidate_widgets": false,
+    "logo": "maxmind.png",
+    "license": "Copyright (c) Phantom Cyber Corporation 2015-2017",
+    "actions": [
+      {
+        "action": "geolocate ip",
+        "description": "Queries MaxMind for IP location info",
+        "type": "investigate",
+        "identifier": "lookup_ip",
+        "read_only": true,
+        "lock": {
+          "enabled": false
+        },
+        "parameters": {
+          "ip": {
+            "description": "IP to geolocate",
+            "data_type": "string",
+            "contains": ["ip"],
+            "primary": true,
+            "required": true,
+            "allow_list": true
+          }
+        },
+        "render": {
+          "type": "map",
+          "width": 10,
+          "height": 5,
+          "title": "IP Geolocation"
+        },
+        "versions": "EQ(*)",
+        "output": [
+          {
+            "data_path": "action_result.status",
+            "data_type": "string"
+          },
+          {
+            "data_path": "action_result.message",
+            "data_type": "string"
+          },
+
+          {
+            "data_path": "action_result.data.*.continent_name",
+            "data_type": "string"
+          },
+          {
+            "data_path": "action_result.data.*.country_iso_code",
+            "data_type": "string"
+          },
+          {
+            "data_path": "action_result.data.*.country_name",
+            "data_type": "string",
+            "map_info": "Country"
+          },
+          {
+            "data_path": "action_result.data.*.latitude",
+            "data_type": "numeric",
+            "map_info": "latitude"
+          },
+          {
+            "data_path": "action_result.data.*.longitude",
+            "data_type": "numeric",
+            "map_info": "longitude"
+          },
+          {
+            "data_path": "action_result.parameter.ip",
+            "data_type": "string",
+            "contains": [ "ip" ],
+            "map_info": "IP Address"
+          },
+          {
+            "data_path": "action_result.parameter.ip",
+            "data_type": "string",
+            "contains": [ "ip" ],
+            "map_info": "name"
+          },
+          {
+            "data_path": "action_result.data.*.city_name",
+            "data_type": "string",
+            "map_info": "City"
+          },
+          {
+            "data_path": "action_result.data.*.postal_code",
+            "data_type": "string",
+            "map_info": "Postal Code"
+          },
+          {
+            "data_path": "action_result.data.*.as_org",
+            "data_type": "string",
+            "map_info": "Organization"
+          },
+          {
+            "data_path": "action_result.data.*.state_iso_code",
+            "data_type": "string"
+          },
+          {
+            "data_path": "action_result.data.*.state_name",
+            "data_type": "string",
+            "map_info": "State/Province"
+
+          },
+          {
+            "data_path": "action_result.data.*.time_zone",
+            "data_type": "string"
+          },
+          {
+            "data_path": "summary.total_objects",
+            "data_type": "numeric"
+          },
+          {
+            "data_path": "summary.total_objects_successful",
+            "data_type": "numeric"
+          }
+        ]
+      }
+    ]
+}
