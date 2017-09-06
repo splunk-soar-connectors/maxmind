@@ -1,0 +1,8 @@
+{
+  "download_files": [
+        {
+          "source": "https://10.10.0.10/content/dependencies/GeoLite2-City.mmdb",
+          "destination": "./GeoLite2-City.mmdb"
+        }
+    ]
+}
