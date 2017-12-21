@@ -5,8 +5,8 @@
     "type": "information",
     "publisher": "Phantom",
     "main_module": "maxmind_connector.pyc",
-    "app_version": "1.2.21",
-    "utctime_updated": "2017-12-21T03:22:12.000000Z",
+    "app_version": "1.2.19",
+    "utctime_updated": "2017-09-06T23:41:20.000000Z",
     "package_name": "phantom_maxmind",
     "product_name": "GeoIP2",
     "product_vendor": "MaxMind",
@@ -14,8 +14,7 @@
     "min_phantom_version": "1.2.283",
     "configuration": {},
     "consolidate_widgets": false,
-    "logo": "logo_maxmind.svg",
-    "logo_dark": "logo_maxmind_dark.svg",
+    "logo": "maxmind.png",
     "license": "Copyright (c) Phantom Cyber Corporation 2015-2017",
     "actions": [
         {
@@ -52,30 +51,8 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameter.ip",
-                    "data_type": "string",
-                    "contains": [
-                        "ip"
-                    ],
-                    "map_info": "IP Address"
-                },
-                {
-                    "data_path": "action_result.parameter.ip",
-                    "data_type": "string",
-                    "contains": [
-                        "ip"
-                    ],
-                    "map_info": "name"
-                },
-                {
-                    "data_path": "action_result.data.*.as_org",
-                    "data_type": "string",
-                    "map_info": "Organization"
-                },
-                {
-                    "data_path": "action_result.data.*.city_name",
-                    "data_type": "string",
-                    "map_info": "City"
+                    "data_path": "action_result.message",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.continent_name",
@@ -101,9 +78,35 @@
                     "map_info": "longitude"
                 },
                 {
+                    "data_path": "action_result.parameter.ip",
+                    "data_type": "string",
+                    "contains": [
+                        "ip"
+                    ],
+                    "map_info": "IP Address"
+                },
+                {
+                    "data_path": "action_result.parameter.ip",
+                    "data_type": "string",
+                    "contains": [
+                        "ip"
+                    ],
+                    "map_info": "name"
+                },
+                {
+                    "data_path": "action_result.data.*.city_name",
+                    "data_type": "string",
+                    "map_info": "City"
+                },
+                {
                     "data_path": "action_result.data.*.postal_code",
                     "data_type": "string",
                     "map_info": "Postal Code"
+                },
+                {
+                    "data_path": "action_result.data.*.as_org",
+                    "data_type": "string",
+                    "map_info": "Organization"
                 },
                 {
                     "data_path": "action_result.data.*.state_iso_code",
@@ -116,10 +119,6 @@
                 },
                 {
                     "data_path": "action_result.data.*.time_zone",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.message",
                     "data_type": "string"
                 },
                 {
