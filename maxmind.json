@@ -14,7 +14,8 @@
     "min_phantom_version": "1.2.283",
     "configuration": {},
     "consolidate_widgets": false,
-    "logo": "maxmind.png",
+    "logo": "logo_maxmind.svg",
+    "logo_dark": "logo_maxmind_dark.svg",
     "license": "Copyright (c) Phantom Cyber Corporation 2015-2017",
     "actions": [
         {
