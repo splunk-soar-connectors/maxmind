@@ -16,7 +16,7 @@
     "consolidate_widgets": false,
     "logo": "logo_maxmind.svg",
     "logo_dark": "logo_maxmind_dark.svg",
-    "license": "Copyright (c) Phantom Cyber Corporation 2015-2017",
+    "license": "Copyright (c) Phantom Cyber Corporation, 2015-2018",
     "actions": [
         {
             "action": "geolocate ip",
