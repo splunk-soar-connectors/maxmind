@@ -5,8 +5,8 @@
     "type": "information",
     "publisher": "Phantom",
     "main_module": "maxmind_connector.pyc",
-    "app_version": "1.2.21",
-    "utctime_updated": "2018-01-26T00:48:35.000000Z",
+    "app_version": "1.2.22",
+    "utctime_updated": "2018-02-15T02:23:35.000000Z",
     "package_name": "phantom_maxmind",
     "product_name": "GeoIP2",
     "product_vendor": "MaxMind",
@@ -16,7 +16,7 @@
     "consolidate_widgets": false,
     "logo": "logo_maxmind.svg",
     "logo_dark": "logo_maxmind_dark.svg",
-    "license": "Copyright (c) Phantom Cyber Corporation, 2015-2018",
+    "license": "Copyright (c) Phantom Cyber Corporation, 2014-2018",
     "actions": [
         {
             "action": "geolocate ip",
