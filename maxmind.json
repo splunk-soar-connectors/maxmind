@@ -1,7 +1,7 @@
 {
     "appid": "c566e153-3118-4033-abda-14dd9748c91a",
     "name": "MaxMind",
-    "description": "This app provides ip geolocation with the included MaxMind database.",
+    "description": "This app provides IP geolocation with the included MaxMind database",
     "type": "information",
     "publisher": "Phantom",
     "main_module": "maxmind_connector.pyc",
@@ -11,12 +11,12 @@
     "product_name": "GeoIP2",
     "product_vendor": "MaxMind",
     "product_version_regex": ".*",
-    "min_phantom_version": "1.2.283",
+    "min_phantom_version": "4.0.1068",
     "configuration": {},
     "consolidate_widgets": false,
     "logo": "logo_maxmind.svg",
     "logo_dark": "logo_maxmind_dark.svg",
-    "license": "Copyright (c) Phantom Cyber Corporation, 2014-2018",
+    "license": "Copyright (c) 2016-2019 Splunk Inc.",
     "actions": [
         {
             "action": "geolocate ip",
@@ -49,38 +49,56 @@
             "output": [
                 {
                     "data_path": "action_result.status",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.continent_name",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Asia"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.country_iso_code",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "IN"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.country_name",
                     "data_type": "string",
-                    "map_info": "Country"
+                    "map_info": "Country",
+                    "example_values": [
+                        "India"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.latitude",
                     "data_type": "numeric",
-                    "map_info": "latitude"
+                    "map_info": "latitude",
+                    "example_values": [
+                        23.0333
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.longitude",
                     "data_type": "numeric",
-                    "map_info": "longitude"
+                    "map_info": "longitude",
+                    "example_values": [
+                        72.6167
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.ip",
                     "data_type": "string",
+                    "example_values": [
+                        "203.88.139.34"
+                    ],
                     "contains": [
                         "ip"
                     ],
@@ -89,6 +107,9 @@
                 {
                     "data_path": "action_result.parameter.ip",
                     "data_type": "string",
+                    "example_values": [
+                        "203.88.139.34"
+                    ],
                     "contains": [
                         "ip"
                     ],
@@ -97,38 +118,90 @@
                 {
                     "data_path": "action_result.data.*.city_name",
                     "data_type": "string",
-                    "map_info": "City"
+                    "map_info": "City",
+                    "example_values": [
+                        "Ahmedabad"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.postal_code",
                     "data_type": "string",
-                    "map_info": "Postal Code"
+                    "map_info": "Postal Code",
+                    "example_values": [
+                        380007
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.as_org",
                     "data_type": "string",
-                    "map_info": "Organization"
+                    "map_info": "Organization",
+                    "example_values": [
+                        ""
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.state_iso_code",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "GJ"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.state_name",
                     "data_type": "string",
-                    "map_info": "State/Province"
+                    "map_info": "State/Province",
+                    "example_values": [
+                        "Gujarat"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.time_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "Asia/Kolkata"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.city",
+                    "data_type": "string",
+                    "example_values": [
+                        "Ahmedabad"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.state",
+                    "data_type": "string",
+                    "example_values": [
+                        "GJ"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.country",
+                    "data_type": "string",
+                    "example_values": [
+                        "India"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "City: Ahmedabad, State: GJ, Country: India"
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ]
         }
