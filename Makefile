@@ -27,7 +27,7 @@ export IMAGE_TAG          ?= $(shell grep ^image: .gitlab-ci.yml | cut -d : -f 3
 export APP_DIR            ?= $(shell pwd)
 export APP_REPO_NAME      ?= $(shell basename $(APP_DIR))
 export APP_BRANCH         ?= $(CI_COMMIT_REF_NAME)
-export TEST_BRANCH        ?= master
+export TEST_BRANCH        ?= build-app
 
 # Pipeline secrets
 SECRETS = artifactory_token gitlab_api_token app_deploy_key
