@@ -1,16 +1,8 @@
-# --
 # File: maxmind_connector.py
+# Copyright (c) 2016-2019 Splunk Inc.
 #
-# Copyright (c) Phantom Cyber Corporation, 2014-2018
-#
-# This unpublished material is proprietary to Phantom Cyber.
-# All rights reserved. The methods and
-# techniques described herein are considered trade secrets
-# and/or confidential. Reproduction or distribution, in whole
-# or in part, is forbidden except by express written permission
-# of Phantom Cyber.
-#
-# --
+# SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
+# without a valid written license from Splunk Inc. is PROHIBITED.
 
 import os
 
@@ -133,3 +125,31 @@ class MaxmindConnector(BaseConnector):
             self._handle_lookup_ip_list(param)
 
         return self.get_status()
+
+
+if __name__ == '__main__':
+
+    import sys
+    import json
+    # import pudb
+    from traceback import format_exc
+
+    # pudb.set_trace()
+
+    if (len(sys.argv) < 2):
+        print ('No test json specified as input')
+        exit(0)
+
+    with open(sys.argv[1]) as f:
+        in_json = f.read()
+        in_json = json.loads(in_json)
+        print (json.dumps(in_json, indent=4))
+        connector = MaxmindConnector()
+        connector.print_progress_message = True
+        try:
+            ret_val = connector._handle_action(json.dumps(in_json), None)
+        except:
+            print (format_exc())
+        print (json.dumps(json.loads(ret_val), indent=4))
+
+    exit(0)
