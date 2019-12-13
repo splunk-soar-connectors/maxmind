@@ -78,11 +78,11 @@
             },
             {
                 "module": "requests",
-                "input_file": "wheels/py2/requests-2.22.0-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/requests-2.22.0-py2.py3-none-any.whl"
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/py2/urllib3-1.25.7-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/urllib3-1.25.7-py2.py3-none-any.whl"
             }
         ]
     },
