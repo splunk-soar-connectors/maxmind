@@ -21,8 +21,68 @@
     "pip_dependencies": {
         "wheel": [
             {
+                "module": "certifi",
+                "input_file": "wheels/py2/certifi-2019.11.28-py2.py3-none-any.whl"
+            },
+            {
+                "module": "chardet",
+                "input_file": "wheels/py2/chardet-3.0.4-py2.py3-none-any.whl"
+            },
+            {
                 "module": "geoip2",
-                "input_file": "wheels/geoip2-2.9.0-py2.py3-none-any.whl"
+                "input_file": "wheels/py2/geoip2-2.9.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "idna",
+                "input_file": "wheels/py2/idna-2.8-py2.py3-none-any.whl"
+            },
+            {
+                "module": "ipaddress",
+                "input_file": "wheels/py2/ipaddress-1.0.23-py2.py3-none-any.whl"
+            },
+            {
+                "module": "maxminddb",
+                "input_file": "wheels/py2/maxminddb-1.5.1-cp27-none-any.whl"
+            },
+            {
+                "module": "requests",
+                "input_file": "wheels/py2/requests-2.22.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "urllib3",
+                "input_file": "wheels/py2/urllib3-1.25.7-py2.py3-none-any.whl"
+            }
+        ]
+    },
+    "pip3_dependencies": {
+        "wheel": [
+            {
+                "module": "certifi",
+                "input_file": "wheels/py3/certifi-2019.11.28-py2.py3-none-any.whl"
+            },
+            {
+                "module": "chardet",
+                "input_file": "wheels/py3/chardet-3.0.4-py2.py3-none-any.whl"
+            },
+            {
+                "module": "geoip2",
+                "input_file": "wheels/py3/geoip2-2.9.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "idna",
+                "input_file": "wheels/py3/idna-2.8-py2.py3-none-any.whl"
+            },
+            {
+                "module": "maxminddb",
+                "input_file": "wheels/py3/maxminddb-1.5.1-py3-none-any.whl"
+            },
+            {
+                "module": "requests",
+                "input_file": "wheels/py2/requests-2.22.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "urllib3",
+                "input_file": "wheels/py2/urllib3-1.25.7-py2.py3-none-any.whl"
             }
         ]
     },
