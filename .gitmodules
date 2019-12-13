@@ -1,4 +1,4 @@
 [submodule "wheels"]
     path = wheels
-    url = git@cd.splunkdev.com:phantom-external/geoip2.git
+    url = git@cd.splunkdev.com:phantom-external/maxmind-deps.git
     ignore = dirty
