@@ -15,6 +15,8 @@ from phantom.action_result import ActionResult
 from maxmind_consts import *
 
 import geoip2.database
+import ipaddress
+import sys
 
 MMDB_FILE_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), MMDB_FILE)
 
@@ -23,6 +25,7 @@ class MaxmindConnector(BaseConnector):
 
     # Commands supported by this script
     ACTION_ID_LOOKUP_IP_GEO_LOCATION = "lookup_ip"
+    ACTION_ID_TEST_ASSET_CONNECTIVITY = "test_asset_connectivity"
 
     def __init__(self):
 
@@ -30,8 +33,28 @@ class MaxmindConnector(BaseConnector):
         super(MaxmindConnector, self).__init__()
 
         self.reader = None
+        self._ip_address = None
+        self._python_version = None
 
     def initialize(self):
+
+        # Fetching the Python major version
+        try:
+            self._python_version = int(sys.version_info[0])
+        except:
+            return self.set_status(phantom.APP_ERROR, "Error occurred while getting the Phantom server's Python major version.")
+
+        # Validate the configuration parameters
+        config = self.get_config()
+        self._ip_address = config.get('ip_address', MAXMIND_DEFAULT_IP_CONNECTIVITY)
+
+        try:
+            if self._python_version == 2:
+                ipaddress.ip_address(unicode(self._ip_address))
+            else:
+                ipaddress.ip_address(self._ip_address)
+        except:
+            return self.set_status(phantom.APP_ERROR, "Please provide a valid IP Address in the configuration parameters")
 
         # Load the country db
         try:
@@ -42,6 +65,25 @@ class MaxmindConnector(BaseConnector):
 
         self.save_progress(MAXMIND_MSG_DB_LOADED)
         return phantom.APP_SUCCESS
+
+    def _handle_test_connectivity(self, param):
+
+        # Create a ActionResult object to store the result
+        self.save_progress('In action handler for: {0}'.format(self.get_action_identifier()))
+        self.save_progress('Querying the Maxmind DB for the IP: {}'.format(self._ip_address))
+
+        try:
+            _ = self.reader.city(self._ip_address)
+        except:
+            self.save_progress(MAXMIND_SUCCESS_MSG_IP_NOT_FOUND, ip=self._ip_address)
+            self.debug_print(MAXMIND_SUCCESS_MSG_IP_NOT_FOUND.format(ip=self._ip_address))
+            self.save_progress("Test Connectivity Passed")
+            return self.set_status(phantom.APP_SUCCESS)
+
+        # Found the IP
+        self.save_progress(MAXMIND_SUCCESS_MSG_IP_FOUND, ip=self._ip_address)
+        self.save_progress("Test Connectivity Passed")
+        return self.set_status(phantom.APP_SUCCESS)
 
     def _handle_lookup_ip_list(self, param):
 
@@ -123,6 +165,8 @@ class MaxmindConnector(BaseConnector):
 
         if (self.get_action_identifier() == self.ACTION_ID_LOOKUP_IP_GEO_LOCATION):
             self._handle_lookup_ip_list(param)
+        elif (self.get_action_identifier() == self.ACTION_ID_TEST_ASSET_CONNECTIVITY):
+            self._handle_test_connectivity(param)
 
         return self.get_status()
 
