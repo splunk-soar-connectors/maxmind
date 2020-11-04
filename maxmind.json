@@ -12,6 +12,9 @@
     "product_vendor": "MaxMind",
     "product_version_regex": ".*",
     "min_phantom_version": "4.8.24304",
+    "latest_tested_versions": [
+        "GeoLite2-City MMDB Updated 2020-11-03"
+    ],
     "python_version": "3",
     "configuration": {
         "ip_address": {
