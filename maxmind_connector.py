@@ -173,7 +173,6 @@ class MaxmindConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import sys
     import json
     # import pudb
     from traceback import format_exc

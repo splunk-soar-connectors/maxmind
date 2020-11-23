@@ -216,16 +216,13 @@
                     "data_type": "string",
                     "map_info": "Postal Code",
                     "example_values": [
-                        380007
+                        "380007"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.as_org",
                     "data_type": "string",
-                    "map_info": "Organization",
-                    "example_values": [
-                        ""
-                    ]
+                    "map_info": "Organization"
                 },
                 {
                     "data_path": "action_result.data.*.state_iso_code",
