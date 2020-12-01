@@ -4,4 +4,4 @@ geoip2==2.9.0
 idna
 maxminddb==1.5.1
 requests==2.22.0
-urllib3==1.25.9
+urllib3==1.26.2
