@@ -14,7 +14,6 @@ from phantom.action_result import ActionResult
 # THIS Connector imports
 from maxmind_consts import *
 
-# TODO commit
 import geoip2.database
 import ipaddress
 import sys
