@@ -59,7 +59,11 @@
             },
             {
                 "module": "urllib3",
+<<<<<<< HEAD
                 "input_file": "wheels/py2/urllib3-1.26.2-py2.py3-none-any.whl"
+=======
+                "input_file": "wheels/py2/urllib3-1.25.7-py2.py3-none-any.whl"
+>>>>>>> master
             }
         ]
     },
@@ -91,7 +95,11 @@
             },
             {
                 "module": "urllib3",
+<<<<<<< HEAD
                 "input_file": "wheels/py3/urllib3-1.26.2-py2.py3-none-any.whl"
+=======
+                "input_file": "wheels/py3/urllib3-1.25.7-py2.py3-none-any.whl"
+>>>>>>> master
             }
         ]
     },
