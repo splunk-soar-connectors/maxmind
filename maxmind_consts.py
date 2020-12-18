@@ -9,9 +9,12 @@
 MAXMIND_MSG_DB_LOAD_FAILED = "MaxMind DB load failed for: '{db_file}'"
 MAXMIND_MSG_DB_LOADED = "MaxMind DB loaded"
 MAXMIND_MSG_IP_NOT_FOUND = "IP '{ip}' not found"
+MAXMIND_SUCCESS_MSG_IP_NOT_FOUND = "Successfully able to query the MaxMind DB for the IP: '{ip}'. But, the requested IP not found."
+MAXMIND_SUCCESS_MSG_IP_FOUND = "Successfully able to query the MaxMind DB for the IP: '{ip}'"
 
 MAXMIND_ERR_IP_NOT_FOUND = "IP not found"
 MAXMIND_SUCC_IP_FOUND = "IP found"
+MAXMIND_DEFAULT_IP_CONNECTIVITY = "8.8.8.8"
 
 # Jsons used either in params or result
 MAXMIND_JSON_CITY_NAME = "city_name"

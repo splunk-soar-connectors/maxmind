@@ -1,4 +1,3 @@
 [submodule "wheels"]
-    path = wheels
-    url = git@cd.splunkdev.com:phantom-external/maxmind-deps.git
-    ignore = dirty
+	path = wheels
+	url = git@cd.splunkdev.com:phantom-external/maxmind-deps.git

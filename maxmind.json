@@ -5,15 +5,24 @@
     "type": "information",
     "publisher": "Splunk",
     "main_module": "maxmind_connector.py",
-    "app_version": "2.0.3",
-    "utctime_updated": "2020-01-07T21:49:02.000000Z",
+    "app_version": "2.0.19",
+    "utctime_updated": "2020-12-17T07:34:31.000000Z",
     "package_name": "phantom_maxmind",
     "product_name": "GeoIP2",
     "product_vendor": "MaxMind",
     "product_version_regex": ".*",
-    "min_phantom_version": "4.5.15922",
+    "min_phantom_version": "4.8.24304",
+    "latest_tested_versions": [
+        "GeoLite2-City MMDB Updated 2020-11-03"
+    ],
     "python_version": "3",
-    "configuration": {},
+    "configuration": {
+        "ip_address": {
+            "data_type": "string",
+            "order": 0,
+            "description": "IP Address for testing connectivity (default: 8.8.8.8)"
+        }
+    },
     "consolidate_widgets": false,
     "logo": "logo_maxmind.svg",
     "logo_dark": "logo_maxmind_dark.svg",
@@ -50,7 +59,7 @@
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/py2/urllib3-1.25.7-py2.py3-none-any.whl"
+                "input_file": "wheels/py2/urllib3-1.26.2-py2.py3-none-any.whl"
             }
         ]
     },
@@ -82,11 +91,21 @@
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/py3/urllib3-1.25.7-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/urllib3-1.26.2-py2.py3-none-any.whl"
             }
         ]
     },
     "actions": [
+        {
+            "action": "test connectivity",
+            "description": "Validate the asset configuration for connectivity. This action queries the MaxMind DB for the IP mentioned in the configuration parameters",
+            "type": "test",
+            "identifier": "test_asset_connectivity",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        },
         {
             "action": "geolocate ip",
             "description": "Queries MaxMind for IP location info",
@@ -197,16 +216,13 @@
                     "data_type": "string",
                     "map_info": "Postal Code",
                     "example_values": [
-                        380007
+                        "380007"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.as_org",
                     "data_type": "string",
-                    "map_info": "Organization",
-                    "example_values": [
-                        ""
-                    ]
+                    "map_info": "Organization"
                 },
                 {
                     "data_path": "action_result.data.*.state_iso_code",
