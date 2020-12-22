@@ -1,7 +1,7 @@
 {
   "download_files": [
         {
-          "source": "https://10.1.10.10/content/dependencies/GeoLite2-City.mmdb",
+          "source": "https://repo.splunk.com/artifactory/phantom-content/dependencies/GeoLite2-City.mmdb",
           "destination": "./GeoLite2-City.mmdb"
         }
     ]
