@@ -17,8 +17,17 @@ from maxmind_consts import *
 import geoip2.database
 import ipaddress
 import sys
+import requests
+import tarfile
+import pathlib
+from dateutil import parser
+from datetime import datetime
 
-MMDB_FILE_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), MMDB_FILE)
+MMDB_DIR = os.path.abspath(os.path.dirname(__file__))
+MMDB_FILE_PATH = os.path.join(MMDB_DIR, MMDB_FILE)
+
+# Path to store the tar file downloaded from MaxMind.
+MMDB_ZIP_FILE_PATH = os.path.join(MMDB_DIR, MMDB_TAR_FILE)
 
 
 class MaxmindConnector(BaseConnector):
@@ -26,6 +35,8 @@ class MaxmindConnector(BaseConnector):
     # Commands supported by this script
     ACTION_ID_LOOKUP_IP_GEO_LOCATION = "lookup_ip"
     ACTION_ID_TEST_ASSET_CONNECTIVITY = "test_asset_connectivity"
+    ACTION_ID_UPDATE_DATABASE = "update_database"
+    ACTION_ID_ON_POLL = "on_poll"
 
     def __init__(self):
 
@@ -35,8 +46,14 @@ class MaxmindConnector(BaseConnector):
         self.reader = None
         self._ip_address = None
         self._python_version = None
+        self._state = {}
+
+    def finalize(self):
+        self.save_state(self._state)
+        return phantom.APP_SUCCESS
 
     def initialize(self):
+        self._state = self.load_state()
 
         # Fetching the Python major version
         try:
@@ -47,6 +64,7 @@ class MaxmindConnector(BaseConnector):
         # Validate the configuration parameters
         config = self.get_config()
         self._ip_address = config.get('ip_address', MAXMIND_DEFAULT_IP_CONNECTIVITY)
+        self._license_key = config.get('license_key')
 
         try:
             if self._python_version == 2:
@@ -159,14 +177,136 @@ class MaxmindConnector(BaseConnector):
 
         return phantom.APP_SUCCESS
 
+    def _handle_on_poll(self, param):
+        try:
+            if not self._is_db_latest():
+                self.save_progress('The database is already up to date.')
+                return self._create_ingested_container()
+        except Exception as e:
+            return self.save_progress(phantom.APP_ERROR, 'Failed to poll', e)
+
+        status = self._handle_update_db(param)
+        if phantom.is_fail(status):
+            return status
+
+        status = self._create_ingested_container()
+        if phantom.is_fail(status):
+            return status
+
+        if self.is_poll_now():
+            self.save_progress('Successfully updated the database to the latest version')
+
+        return self.set_status(phantom.APP_SUCCESS)
+
+    def _create_ingested_container(self):
+        self.debug_print('Creating an ingested container')
+        utc_now = datetime.utcnow()
+        container = {'name': 'maxmind_ingestion_{0}'.format(utc_now.strftime('%Y-%m-%dT%H:%M:%SZ'))}
+        ret_val, message, cid = self.save_container(container)
+        self.debug_print(
+            'save_container (with artifacts) returns, value: {0}, reason: {1}, id: {2}'.format(ret_val, message, cid))
+        return self.set_status(ret_val, message, cid)
+
+    def _is_db_latest(self):
+        """Check if our database is already the latest one.
+
+        This check will not affect the daily download limit.
+        For more info on the daily download, see https://dev.maxmind.com/geoip/updating-databases?lang=en#checking-for-the-latest-release-date
+        """
+        self.debug_print('Checking if the current database is up to date.')
+        db_url = DB_DOWNLOAD_URL.format(self._license_key)
+
+        r = requests.head(db_url)
+        if r.status_code != 200:
+            raise Exception(
+                'Failed to check if the database is up-to-date. Status code: {0}. Error: {1}'.format(r.status_code, r.content))
+
+        headers = r.headers
+        last_modified_timestamp = headers['last-modified']
+        cached_last_modified_time = self._state.get('db_last_modified_time')
+
+        # if this is the 1st database update
+        if not cached_last_modified_time:
+            return True
+
+        dt = parser.parse(last_modified_timestamp)
+        cached_dt = parser.parse(cached_last_modified_time)
+        return dt > cached_dt
+
+    def _handle_update_db(self, param):
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        self.debug_print('Updating database.')
+
+        try:
+            status, msg = self._download_and_replace_db()
+            action_result.set_status(status, msg)
+        except Exception as e:
+            error_msg = 'Error in downloading or replacing database.'
+            action_result.set_status(phantom.APP_ERROR, error_msg, e)
+
+        return action_result.get_status()
+
+    def _download_db(self, save_path, chunk_size=128):
+        """Download the latest database from MaxMind."""
+        url = DB_DOWNLOAD_URL.format(self._license_key)
+        self.debug_print('Downloading database from %s.' % url)
+
+        r = requests.get(url, stream=True)
+        if r.status_code != 200:
+            raise Exception(
+                'Failed to download database. Status Code: {0}. Error: {1}'.format(r.status_code, r.content))
+
+        headers = r.headers
+        cached_last_modified_time = headers['last-modified']
+
+        self._state['db_last_modified_time'] = cached_last_modified_time
+
+        with open(save_path, 'wb') as fd:
+            for chunk in r.iter_content(chunk_size=chunk_size):
+                fd.write(chunk)
+
+    def _replace_db(self, tar_file_path):
+        self.debug_print('Replacing old db with the new db.')
+
+        # Extract the ZIP database file and keep only the database part.
+        # The ZIP file contains README and other unnecessary files.
+        tar = tarfile.open(tar_file_path)
+        members = tar.getmembers()
+        output_dir = './'
+        for mem in members:
+            p = pathlib.Path(mem.name)
+            if mem.isfile() and p.parts[1].endswith('mmdb'):
+                # Get rid of the wrapping folder here.
+                mem.name = p.parts[1]
+
+                # Replace the old db with the new one.
+                tar.extract(mem, output_dir)
+
+        self.debug_print('Removing the ZIP database file.')
+        os.remove(tar_file_path)
+
+    def _download_and_replace_db(self):
+        self.debug_print('Downloading database.')
+
+        self._download_db(MMDB_ZIP_FILE_PATH)
+        self._replace_db(MMDB_ZIP_FILE_PATH)
+
+        self.debug_print('Successfully updated database.')
+        return phantom.APP_SUCCESS, 'Successfully updated database.'
+
     def handle_action(self, param):
         """
         """
+        action = self.get_action_identifier()
 
-        if (self.get_action_identifier() == self.ACTION_ID_LOOKUP_IP_GEO_LOCATION):
+        if (action == self.ACTION_ID_LOOKUP_IP_GEO_LOCATION):
             self._handle_lookup_ip_list(param)
-        elif (self.get_action_identifier() == self.ACTION_ID_TEST_ASSET_CONNECTIVITY):
+        elif (action == self.ACTION_ID_UPDATE_DATABASE):
+            self._handle_update_db(param)
+        elif (action == self.ACTION_ID_TEST_ASSET_CONNECTIVITY):
             self._handle_test_connectivity(param)
+        elif (action == self.ACTION_ID_ON_POLL):
+            self._handle_on_poll(param)
 
         return self.get_status()
 
