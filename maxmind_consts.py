@@ -36,3 +36,5 @@ MAXMIND_JSON_COUNTRY = "country"
 
 # Other constants used in the connector
 MMDB_FILE = "GeoLite2-City.mmdb"
+MMDB_TAR_FILE = "GeoLite2-City.tar.gz"
+DB_DOWNLOAD_URL = "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={0}&suffix=tar.gz"
