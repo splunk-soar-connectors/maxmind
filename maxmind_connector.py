@@ -272,7 +272,8 @@ class MaxmindConnector(BaseConnector):
         # The ZIP file contains README and other unnecessary files.
         tar = tarfile.open(tar_file_path)
         members = tar.getmembers()
-        output_dir = './'
+        output_dir = '{0}/'.format(MMDB_DIR)
+
         for mem in members:
             p = pathlib.Path(mem.name)
             if mem.isfile() and p.parts[1].endswith('mmdb'):
@@ -280,6 +281,7 @@ class MaxmindConnector(BaseConnector):
                 mem.name = p.parts[1]
 
                 # Replace the old db with the new one.
+                self.debug_print('Saving the new database at {0}{1}'.format(output_dir, mem.name))
                 tar.extract(mem, output_dir)
 
         self.debug_print('Removing the ZIP database file.')
