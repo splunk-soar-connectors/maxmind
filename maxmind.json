@@ -11,7 +11,7 @@
     "product_name": "GeoIP2",
     "product_vendor": "MaxMind",
     "product_version_regex": ".*",
-    "min_phantom_version": "4.9.39220",
+    "min_phantom_version": "4.10.0.40961",
     "latest_tested_versions": [
         "GeoLite2-City MMDB Updated 2020-11-03"
     ],
@@ -60,11 +60,11 @@
             },
             {
                 "module": "requests",
-                "input_file": "wheels/py2/requests-2.22.0-py2.py3-none-any.whl"
+                "input_file": "wheels/py2/requests-2.26.0-py2.py3-none-any.whl"
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/py2/urllib3-1.26.2-py2.py3-none-any.whl"
+                "input_file": "wheels/py2/urllib3-1.26.6-py2.py3-none-any.whl"
             }
         ]
     },
@@ -92,11 +92,11 @@
             },
             {
                 "module": "requests",
-                "input_file": "wheels/py3/requests-2.22.0-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/requests-2.26.0-py2.py3-none-any.whl"
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/py3/urllib3-1.26.2-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/urllib3-1.26.6-py2.py3-none-any.whl"
             }
         ]
     },
