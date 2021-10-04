@@ -1,0 +1,106 @@
+{
+	"info": {
+		"_postman_id": "f9153dcd-abc7-45a1-8c9a-c79d8746b18b",
+		"name": "MaxMind",
+		"description": "For this collection to work, please ensure fill in the values of the collection variables. You can find values for the variables by looking at the assets.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Check db last-modified without downloading the db",
+			"request": {
+				"method": "HEAD",
+				"header": [],
+				"url": {
+					"raw": "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={{LICENSE_KEY}}&suffix=tar.gz",
+					"protocol": "https",
+					"host": [
+						"download",
+						"maxmind",
+						"com"
+					],
+					"path": [
+						"app",
+						"geoip_download"
+					],
+					"query": [
+						{
+							"key": "edition_id",
+							"value": "GeoLite2-City"
+						},
+						{
+							"key": "license_key",
+							"value": "{{LICENSE_KEY}}"
+						},
+						{
+							"key": "suffix",
+							"value": "tar.gz"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Download the latest GeoLite2-City database",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={{LICENSE_KEY}}&suffix=tar.gz",
+					"protocol": "https",
+					"host": [
+						"download",
+						"maxmind",
+						"com"
+					],
+					"path": [
+						"app",
+						"geoip_download"
+					],
+					"query": [
+						{
+							"key": "edition_id",
+							"value": "GeoLite2-City"
+						},
+						{
+							"key": "license_key",
+							"value": "{{LICENSE_KEY}}"
+						},
+						{
+							"key": "suffix",
+							"value": "tar.gz"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "LICENSE_KEY",
+			"value": "LICENSE_KEY"
+		}
+	]
+}
