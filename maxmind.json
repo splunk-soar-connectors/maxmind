@@ -5,13 +5,13 @@
     "type": "information",
     "publisher": "Splunk",
     "main_module": "maxmind_connector.py",
-    "app_version": "2.0.23",
-    "utctime_updated": "2020-12-23T00:29:29.000000Z",
+    "app_version": "2.1.5",
+    "utctime_updated": "2021-10-04T22:34:37.000000Z",
     "package_name": "phantom_maxmind",
     "product_name": "GeoIP2",
     "product_vendor": "MaxMind",
     "product_version_regex": ".*",
-    "min_phantom_version": "4.8.24304",
+    "min_phantom_version": "4.10.0.40961",
     "latest_tested_versions": [
         "GeoLite2-City MMDB Updated 2020-11-03"
     ],
@@ -21,6 +21,11 @@
             "data_type": "string",
             "order": 0,
             "description": "IP Address for testing connectivity (default: 8.8.8.8)"
+        },
+        "license_key": {
+            "data_type": "password",
+            "order": 1,
+            "description": "MaxMind License key to download new databases"
         }
     },
     "consolidate_widgets": false,
@@ -55,11 +60,11 @@
             },
             {
                 "module": "requests",
-                "input_file": "wheels/py2/requests-2.22.0-py2.py3-none-any.whl"
+                "input_file": "wheels/py2/requests-2.26.0-py2.py3-none-any.whl"
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/py2/urllib3-1.26.2-py2.py3-none-any.whl"
+                "input_file": "wheels/py2/urllib3-1.26.6-py2.py3-none-any.whl"
             }
         ]
     },
@@ -87,11 +92,11 @@
             },
             {
                 "module": "requests",
-                "input_file": "wheels/py3/requests-2.22.0-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/requests-2.26.0-py2.py3-none-any.whl"
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/py3/urllib3-1.26.2-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/urllib3-1.26.6-py2.py3-none-any.whl"
             }
         ]
     },
@@ -117,6 +122,7 @@
             },
             "parameters": {
                 "ip": {
+                    "order": 0,
                     "description": "IP to geolocate",
                     "data_type": "string",
                     "contains": [
@@ -289,6 +295,100 @@
                     ]
                 }
             ]
+        },
+        {
+            "action": "update data",
+            "description": "Update database used to locate an ip",
+            "verbose": "This app uses the MaxMind GeoLite2 City database.",
+            "type": "generic",
+            "identifier": "update_database",
+            "read_only": false,
+            "parameters": {},
+            "render": {
+                "width": 12,
+                "title": "Update Database",
+                "type": "table",
+                "height": 5
+            },
+            "output": [
+                {
+                    "column_name": "Status",
+                    "column_order": 0,
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "column_name": "Message",
+                    "column_order": 1,
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Successfully updated database."
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "on poll",
+            "description": "Update the database if there is a newer one on the server",
+            "type": "ingest",
+            "identifier": "on_poll",
+            "read_only": true,
+            "parameters": {
+                "container_id": {
+                    "data_type": "string",
+                    "order": 0,
+                    "description": "Container IDs to limit the ingestion to",
+                    "allow_list": true
+                },
+                "start_time": {
+                    "data_type": "numeric",
+                    "order": 1,
+                    "description": "Start of time range, in epoch time (milliseconds)",
+                    "verbose": "If not specified, the default is past 10 days."
+                },
+                "end_time": {
+                    "data_type": "numeric",
+                    "order": 2,
+                    "description": "End of time range, in epoch time (milliseconds)",
+                    "verbose": "If not specified, the default is now."
+                },
+                "container_count": {
+                    "data_type": "numeric",
+                    "order": 3,
+                    "description": "Maximum number of container records to query for"
+                },
+                "artifact_count": {
+                    "data_type": "numeric",
+                    "order": 4,
+                    "description": "Maximum number of artifact records to query for"
+                }
+            },
+            "output": [],
+            "versions": "EQ(*)"
         }
     ]
 }
