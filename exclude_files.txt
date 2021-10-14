@@ -4,3 +4,5 @@ Makefile
 .git*
 whitesource-results
 *.postman_collection.json
+whitesource*
+gl-*.csv
