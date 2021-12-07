@@ -3,13 +3,6 @@ Copyright 2021 Splunk Inc.
 
 Third-party Software Attributions:
 
-Library: chardet
-Version: 3.0.4
-License: LGPL 3.0
-Ian Cordasco
-Dan Blanchard
-Mark Pilgrim
-
 Library: geoip2
 Version: 2.9.0
 License: Apache 2.0

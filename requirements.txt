@@ -1,5 +1,4 @@
 certifi==2019.11.28
-chardet==3.0.4
 geoip2==2.9.0
 idna==2.8
 maxminddb==1.5.1
