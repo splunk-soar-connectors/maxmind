@@ -186,12 +186,17 @@ class MaxmindConnector(BaseConnector):
         return phantom.APP_SUCCESS
 
     def _handle_on_poll(self, param):
+        if not self._license_key:
+            return self.set_status(phantom.APP_ERROR, 'License key is required to fetch MaxMind database.')
+
         try:
-            if not self._is_db_latest():
+            if not self._should_download_new_db():
                 self.save_progress('The database is already up to date.')
                 return self._create_ingested_container()
         except Exception as e:
-            return self.save_progress(phantom.APP_ERROR, 'Failed to poll', e)
+            err_msg = 'Failed to poll. Reason: {}'.format(e)
+            self.debug_print(err_msg)
+            return self.set_status(phantom.APP_ERROR, err_msg)
 
         status = self._handle_update_db(param)
         if phantom.is_fail(status):
