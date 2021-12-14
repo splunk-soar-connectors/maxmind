@@ -35,6 +35,8 @@ Copyright (c) 2018
 
 POLL NOW can be used to investigate what gets run on each poll during ingestion.
 
+IMPORTANT: LicenseKey is required to be specified in your asset. It's used to fetch the latest MaxMind database.
+
 For more info on what gets run on each poll, see "Scheduled Polling" below.
 
 ## Scheduled Polling
