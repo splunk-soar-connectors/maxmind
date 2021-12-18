@@ -5,13 +5,14 @@
     "type": "information",
     "publisher": "Splunk",
     "main_module": "maxmind_connector.py",
-    "app_version": "2.1.9",
-    "utctime_updated": "2021-10-14T00:07:29.000000Z",
+    "app_version": "2.1.13",
+    "utctime_updated": "2021-12-18T00:03:36.000000Z",
     "package_name": "phantom_maxmind",
     "product_name": "GeoIP2",
     "product_vendor": "MaxMind",
     "product_version_regex": ".*",
-    "min_phantom_version": "4.10.0.40961",
+    "min_phantom_version": "5.0.0",
+    "fips_compliant": true,
     "latest_tested_versions": [
         "GeoLite2-City MMDB Updated 2020-11-03"
     ],
@@ -36,35 +37,39 @@
         "wheel": [
             {
                 "module": "certifi",
-                "input_file": "wheels/py2/certifi-2019.11.28-py2.py3-none-any.whl"
-            },
-            {
-                "module": "chardet",
-                "input_file": "wheels/py2/chardet-3.0.4-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/certifi-2019.11.28-py2.py3-none-any.whl"
             },
             {
                 "module": "geoip2",
-                "input_file": "wheels/py2/geoip2-2.9.0-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
             },
             {
                 "module": "idna",
-                "input_file": "wheels/py2/idna-2.8-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/idna-2.8-py2.py3-none-any.whl"
             },
             {
                 "module": "ipaddress",
-                "input_file": "wheels/py2/ipaddress-1.0.23-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/ipaddress-1.0.23-py2.py3-none-any.whl"
             },
             {
                 "module": "maxminddb",
-                "input_file": "wheels/py2/maxminddb-1.5.1-cp27-none-any.whl"
+                "input_file": "wheels/py2/maxminddb-1.5.1-py2-none-any.whl"
+            },
+            {
+                "module": "python_dateutil",
+                "input_file": "wheels/shared/python_dateutil-2.8.1-py2.py3-none-any.whl"
             },
             {
                 "module": "requests",
-                "input_file": "wheels/py2/requests-2.26.0-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/requests-2.26.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "six",
+                "input_file": "wheels/shared/six-1.16.0-py2.py3-none-any.whl"
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/py2/urllib3-1.26.6-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/urllib3-1.26.6-py2.py3-none-any.whl"
             }
         ]
     },
@@ -72,31 +77,39 @@
         "wheel": [
             {
                 "module": "certifi",
-                "input_file": "wheels/py3/certifi-2019.11.28-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/certifi-2019.11.28-py2.py3-none-any.whl"
             },
             {
-                "module": "chardet",
-                "input_file": "wheels/py3/chardet-3.0.4-py2.py3-none-any.whl"
+                "module": "charset_normalizer",
+                "input_file": "wheels/py3/charset_normalizer-2.0.8-py3-none-any.whl"
             },
             {
                 "module": "geoip2",
-                "input_file": "wheels/py3/geoip2-2.9.0-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
             },
             {
                 "module": "idna",
-                "input_file": "wheels/py3/idna-2.8-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/idna-2.8-py2.py3-none-any.whl"
             },
             {
                 "module": "maxminddb",
                 "input_file": "wheels/py3/maxminddb-1.5.1-py3-none-any.whl"
             },
             {
+                "module": "python_dateutil",
+                "input_file": "wheels/shared/python_dateutil-2.8.1-py2.py3-none-any.whl"
+            },
+            {
                 "module": "requests",
-                "input_file": "wheels/py3/requests-2.26.0-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/requests-2.26.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "six",
+                "input_file": "wheels/shared/six-1.16.0-py2.py3-none-any.whl"
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/py3/urllib3-1.26.6-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/urllib3-1.26.6-py2.py3-none-any.whl"
             }
         ]
     },
