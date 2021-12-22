@@ -226,7 +226,7 @@ class MaxmindConnector(BaseConnector):
         self.debug_print('Checking if the current database is up to date.')
         db_url = DB_DOWNLOAD_URL.format(self._license_key)
 
-        r = requests.head(db_url)
+        r = requests.head(db_url, timeout=DEFAULT_REQUEST_TIMEOUT)
         if r.status_code != 200:
             raise Exception(
                 'Failed to check if the database is up-to-date. Status code: {0}. Error: {1}'.format(r.status_code, r.content))
@@ -262,7 +262,7 @@ class MaxmindConnector(BaseConnector):
         url = DB_DOWNLOAD_URL.format(self._license_key)
         self.debug_print('Downloading database from %s.' % url)
 
-        r = requests.get(url, stream=True)
+        r = requests.get(url, stream=True, timeout=DEFAULT_REQUEST_TIMEOUT)
         if r.status_code != 200:
             raise Exception(
                 'Failed to download database. Status Code: {0}. Error: {1}'.format(r.status_code, r.content))
@@ -334,7 +334,7 @@ if __name__ == '__main__':
 
     if (len(sys.argv) < 2):
         print('No test json specified as input')
-        exit(0)
+        sys.exit(0)
 
     with open(sys.argv[1]) as f:
         in_json = f.read()
@@ -348,4 +348,4 @@ if __name__ == '__main__':
             print(format_exc())
         print(json.dumps(json.loads(ret_val), indent=4))
 
-    exit(0)
+    sys.exit(0)
