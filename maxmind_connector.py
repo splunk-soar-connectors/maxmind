@@ -183,12 +183,17 @@ class MaxmindConnector(BaseConnector):
         return phantom.APP_SUCCESS
 
     def _handle_on_poll(self, param):
+        if not self._license_key:
+            return self.set_status(phantom.APP_ERROR, 'License key is required to fetch MaxMind database.')
+
         try:
-            if not self._is_db_latest():
+            if not self._should_download_new_db():
                 self.save_progress('The database is already up to date.')
                 return self._create_ingested_container()
         except Exception as e:
-            return self.save_progress(phantom.APP_ERROR, 'Failed to poll', e)
+            err_msg = 'Failed to poll. Reason: {}'.format(e)
+            self.debug_print(err_msg)
+            return self.set_status(phantom.APP_ERROR, err_msg)
 
         status = self._handle_update_db(param)
         if phantom.is_fail(status):
@@ -212,8 +217,8 @@ class MaxmindConnector(BaseConnector):
             'save_container (with artifacts) returns, value: {0}, reason: {1}, id: {2}'.format(ret_val, message, cid))
         return self.set_status(ret_val, message, cid)
 
-    def _is_db_latest(self):
-        """Check if our database is already the latest one.
+    def _should_download_new_db(self):
+        """Check if there is a newer MaxMind db to download
 
         This check will not affect the daily download limit.
         For more info on the daily download, see https://dev.maxmind.com/geoip/updating-databases?lang=en#checking-for-the-latest-release-date
@@ -234,6 +239,7 @@ class MaxmindConnector(BaseConnector):
         if not cached_last_modified_time:
             return True
 
+        # Check if the latest db on the server is newer than ours.
         dt = parser.parse(last_modified_timestamp)
         cached_dt = parser.parse(cached_last_modified_time)
         return dt > cached_dt
