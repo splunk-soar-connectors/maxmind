@@ -12,24 +12,21 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
+import ipaddress
 import os
-
-# Phantom imports
-import phantom.app as phantom
-from phantom.base_connector import BaseConnector
-from phantom.action_result import ActionResult
-
-# THIS Connector imports
-from maxmind_consts import *
+import pathlib
+import sys
+import tarfile
+from datetime import datetime
 
 import geoip2.database
-import ipaddress
-import sys
+import phantom.app as phantom
 import requests
-import tarfile
-import pathlib
 from dateutil import parser
-from datetime import datetime
+from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
+
+from maxmind_consts import *
 
 MMDB_DIR = os.path.abspath(os.path.dirname(__file__))
 MMDB_FILE_PATH = os.path.join(MMDB_DIR, MMDB_FILE)
