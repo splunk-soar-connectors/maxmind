@@ -249,12 +249,13 @@ class MaxmindConnector(BaseConnector):
         self.debug_print('Updating database.')
 
         try:
-            status, msg = self._download_and_replace_db()
+            status, msg, response_headers = self._download_and_replace_db()
             action_result.set_status(status, msg)
         except Exception as e:
             error_msg = 'Error in downloading or replacing database.'
             action_result.set_status(phantom.APP_ERROR, error_msg, e)
 
+        action_result.add_data(dict(response_headers))
         return action_result.get_status()
 
     def _download_db(self, save_path, chunk_size=128):
@@ -275,6 +276,8 @@ class MaxmindConnector(BaseConnector):
         with open(save_path, 'wb') as fd:
             for chunk in r.iter_content(chunk_size=chunk_size):
                 fd.write(chunk)
+
+        return headers
 
     def _replace_db(self, tar_file_path):
         self.debug_print('Replacing old db with the new db.')
@@ -301,11 +304,11 @@ class MaxmindConnector(BaseConnector):
     def _download_and_replace_db(self):
         self.debug_print('Downloading database.')
 
-        self._download_db(MMDB_ZIP_FILE_PATH)
+        response_headers = self._download_db(MMDB_ZIP_FILE_PATH)
         self._replace_db(MMDB_ZIP_FILE_PATH)
 
         self.debug_print('Successfully updated database.')
-        return phantom.APP_SUCCESS, 'Successfully updated database.'
+        return (phantom.APP_SUCCESS, 'Successfully updated database.', response_headers)
 
     def handle_action(self, param):
         """

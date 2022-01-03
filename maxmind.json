@@ -339,6 +339,118 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.Date",
+                    "data_type": "string",
+                    "example_values": [
+                        "Mon, 03 Jan 2022 19:37:02 GMT"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ETag",
+                    "data_type": "string",
+                    "example_values": [
+                        "a3fd54f5dae1d3760e32ee743e21ffbc"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.Vary",
+                    "data_type": "string",
+                    "example_values": [
+                        "Accept-Encoding"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.CF-Ray",
+                    "data_type": "string",
+                    "example_values": [
+                        "6c7eadeaee340899-SEA"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.Server",
+                    "data_type": "string",
+                    "example_values": [
+                        "cloudflare"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.Expires",
+                    "data_type": "string",
+                    "example_values": [
+                        "Mon, 03 Jan 2022 19:37:02 GMT"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.expect-ct",
+                    "data_type": "string",
+                    "example_values": [
+                        "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.Connection",
+                    "data_type": "string",
+                    "example_values": [
+                        "keep-alive"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.Content-Type",
+                    "data_type": "string",
+                    "example_values": [
+                        "application/gzip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.Accept-Ranges",
+                    "data_type": "string",
+                    "example_values": [
+                        "bytes"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.Cache-Control",
+                    "data_type": "string",
+                    "example_values": [
+                        "private, max-age=0"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.Last-Modified",
+                    "data_type": "string",
+                    "example_values": [
+                        "Tue, 28 Dec 2021 17:52:24 GMT"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.Content-Length",
+                    "data_type": "string",
+                    "example_values": [
+                        "35748628"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.CF-Cache-Status",
+                    "data_type": "string",
+                    "example_values": [
+                        "DYNAMIC"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.X-MaxMind-Worker",
+                    "data_type": "string",
+                    "example_values": [
+                        "enabled"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.Content-Disposition",
+                    "data_type": "string",
+                    "example_values": [
+                        "attachment; filename=GeoLite2-City_20211228.tar.gz"
+                    ]
+                },
+                {
                     "column_name": "Message",
                     "column_order": 1,
                     "data_path": "action_result.message",
