@@ -308,7 +308,7 @@ class MaxmindConnector(BaseConnector):
         self._replace_db(MMDB_ZIP_FILE_PATH)
 
         self.debug_print('Successfully updated database.')
-        return (phantom.APP_SUCCESS, 'Successfully updated database.', response_headers)
+        return phantom.APP_SUCCESS, 'Successfully updated database.', response_headers
 
     def handle_action(self, param):
         """
