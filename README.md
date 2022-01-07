@@ -1,12 +1,12 @@
 [comment]: # "Auto-generated SOAR connector documentation"
 # MaxMind
 
-Publisher: Splunk
-Connector Version: 2\.1\.11
-Product Vendor: MaxMind
-Product Name: GeoIP2
-Product Version Supported (regex): "\.\*"
-Minimum Product Version: 5\.0\.0
+Publisher: Splunk  
+Connector Version: 2\.2\.3  
+Product Vendor: MaxMind  
+Product Name: GeoIP2  
+Product Version Supported (regex): "\.\*"  
+Minimum Product Version: 5\.0\.0  
 
 This app provides IP geolocation with the included MaxMind database
 
@@ -47,6 +47,9 @@ Copyright (c) 2018
 
 POLL NOW can be used to investigate what gets run on each poll during ingestion.
 
+IMPORTANT: LicenseKey is required to be specified in your asset. It's used to fetch the latest
+MaxMind database.
+
 For more info on what gets run on each poll, see "Scheduled Polling" below.
 
 ## Scheduled Polling
@@ -74,63 +77,63 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **ip\_address** |  optional  | string | IP Address for testing connectivity \(default\: 8\.8\.8\.8\)
 **license\_key** |  optional  | password | MaxMind License key to download new databases
 
-### Supported Actions
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity\. This action queries the MaxMind DB for the IP mentioned in the configuration parameters
-[geolocate ip](#action-geolocate-ip) - Queries MaxMind for IP location info
-[update data](#action-update-data) - Update database used to locate an ip
-[on poll](#action-on-poll) - Update the database if there is a newer one on the server
+### Supported Actions  
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity\. This action queries the MaxMind DB for the IP mentioned in the configuration parameters  
+[geolocate ip](#action-geolocate-ip) - Queries MaxMind for IP location info  
+[update data](#action-update-data) - Update database used to locate an ip  
+[on poll](#action-on-poll) - Update the database if there is a newer one on the server  
 
 ## action: 'test connectivity'
 Validate the asset configuration for connectivity\. This action queries the MaxMind DB for the IP mentioned in the configuration parameters
 
-Type: **test**
+Type: **test**  
 Read only: **True**
 
 #### Action Parameters
 No parameters are required for this action
 
 #### Action Output
-No Output
+No Output  
 
 ## action: 'geolocate ip'
 Queries MaxMind for IP location info
 
-Type: **investigate**
+Type: **investigate**  
 Read only: **True**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**ip** |  required  | IP to geolocate | string |  `ip`
+**ip** |  required  | IP to geolocate | string |  `ip` 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.status | string |
-action\_result\.data\.\*\.continent\_name | string |
-action\_result\.data\.\*\.country\_iso\_code | string |
-action\_result\.data\.\*\.country\_name | string |
-action\_result\.data\.\*\.latitude | numeric |
-action\_result\.data\.\*\.longitude | numeric |
-action\_result\.parameter\.ip | string |  `ip`
-action\_result\.parameter\.ip | string |  `ip`
-action\_result\.data\.\*\.city\_name | string |
-action\_result\.data\.\*\.postal\_code | string |
-action\_result\.data\.\*\.as\_org | string |
-action\_result\.data\.\*\.state\_iso\_code | string |
-action\_result\.data\.\*\.state\_name | string |
-action\_result\.data\.\*\.time\_zone | string |
-action\_result\.summary\.city | string |
-action\_result\.summary\.state | string |
-action\_result\.summary\.country | string |
-action\_result\.message | string |
-summary\.total\_objects | numeric |
-summary\.total\_objects\_successful | numeric |
+action\_result\.status | string | 
+action\_result\.data\.\*\.continent\_name | string | 
+action\_result\.data\.\*\.country\_iso\_code | string | 
+action\_result\.data\.\*\.country\_name | string | 
+action\_result\.data\.\*\.latitude | numeric | 
+action\_result\.data\.\*\.longitude | numeric | 
+action\_result\.parameter\.ip | string |  `ip` 
+action\_result\.parameter\.ip | string |  `ip` 
+action\_result\.data\.\*\.city\_name | string | 
+action\_result\.data\.\*\.postal\_code | string | 
+action\_result\.data\.\*\.as\_org | string | 
+action\_result\.data\.\*\.state\_iso\_code | string | 
+action\_result\.data\.\*\.state\_name | string | 
+action\_result\.data\.\*\.time\_zone | string | 
+action\_result\.summary\.city | string | 
+action\_result\.summary\.state | string | 
+action\_result\.summary\.country | string | 
+action\_result\.message | string | 
+summary\.total\_objects | numeric | 
+summary\.total\_objects\_successful | numeric |   
 
 ## action: 'update data'
 Update database used to locate an ip
 
-Type: **generic**
+Type: **generic**  
 Read only: **False**
 
 This app uses the MaxMind GeoLite2 City database\.
@@ -141,26 +144,42 @@ No parameters are required for this action
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.status | string |
-action\_result\.message | string |
-action\_result\.summary | string |
-summary\.total\_objects | numeric |
-summary\.total\_objects\_successful | numeric |
+action\_result\.status | string | 
+action\_result\.data\.\*\.Date | string | 
+action\_result\.data\.\*\.ETag | string | 
+action\_result\.data\.\*\.Vary | string | 
+action\_result\.data\.\*\.CF\-Ray | string | 
+action\_result\.data\.\*\.Server | string | 
+action\_result\.data\.\*\.Expires | string | 
+action\_result\.data\.\*\.expect\-ct | string | 
+action\_result\.data\.\*\.Connection | string | 
+action\_result\.data\.\*\.Content\-Type | string | 
+action\_result\.data\.\*\.Accept\-Ranges | string | 
+action\_result\.data\.\*\.Cache\-Control | string | 
+action\_result\.data\.\*\.Last\-Modified | string | 
+action\_result\.data\.\*\.Content\-Length | string | 
+action\_result\.data\.\*\.CF\-Cache\-Status | string | 
+action\_result\.data\.\*\.X\-MaxMind\-Worker | string | 
+action\_result\.data\.\*\.Content\-Disposition | string | 
+action\_result\.message | string | 
+action\_result\.summary | string | 
+summary\.total\_objects | numeric | 
+summary\.total\_objects\_successful | numeric |   
 
 ## action: 'on poll'
 Update the database if there is a newer one on the server
 
-Type: **ingest**
+Type: **ingest**  
 Read only: **True**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**container\_id** |  optional  | Container IDs to limit the ingestion to | string |
-**start\_time** |  optional  | Start of time range, in epoch time \(milliseconds\) | numeric |
-**end\_time** |  optional  | End of time range, in epoch time \(milliseconds\) | numeric |
-**container\_count** |  optional  | Maximum number of container records to query for | numeric |
-**artifact\_count** |  optional  | Maximum number of artifact records to query for | numeric |
+**container\_id** |  optional  | Container IDs to limit the ingestion to | string | 
+**start\_time** |  optional  | Start of time range, in epoch time \(milliseconds\) | numeric | 
+**end\_time** |  optional  | End of time range, in epoch time \(milliseconds\) | numeric | 
+**container\_count** |  optional  | Maximum number of container records to query for | numeric | 
+**artifact\_count** |  optional  | Maximum number of artifact records to query for | numeric | 
 
 #### Action Output
 No Output
