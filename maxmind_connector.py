@@ -12,24 +12,21 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
+import ipaddress
 import os
-
-# Phantom imports
-import phantom.app as phantom
-from phantom.base_connector import BaseConnector
-from phantom.action_result import ActionResult
-
-# THIS Connector imports
-from maxmind_consts import *
+import pathlib
+import sys
+import tarfile
+from datetime import datetime
 
 import geoip2.database
-import ipaddress
-import sys
+import phantom.app as phantom
 import requests
-import tarfile
-import pathlib
 from dateutil import parser
-from datetime import datetime
+from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
+
+from maxmind_consts import *
 
 MMDB_DIR = os.path.abspath(os.path.dirname(__file__))
 MMDB_FILE_PATH = os.path.join(MMDB_DIR, MMDB_FILE)
@@ -186,12 +183,17 @@ class MaxmindConnector(BaseConnector):
         return phantom.APP_SUCCESS
 
     def _handle_on_poll(self, param):
+        if not self._license_key:
+            return self.set_status(phantom.APP_ERROR, 'License key is required to fetch MaxMind database.')
+
         try:
-            if not self._is_db_latest():
+            if not self._should_download_new_db():
                 self.save_progress('The database is already up to date.')
                 return self._create_ingested_container()
         except Exception as e:
-            return self.save_progress(phantom.APP_ERROR, 'Failed to poll', e)
+            err_msg = 'Failed to poll. Reason: {}'.format(e)
+            self.debug_print(err_msg)
+            return self.set_status(phantom.APP_ERROR, err_msg)
 
         status = self._handle_update_db(param)
         if phantom.is_fail(status):
@@ -215,8 +217,8 @@ class MaxmindConnector(BaseConnector):
             'save_container (with artifacts) returns, value: {0}, reason: {1}, id: {2}'.format(ret_val, message, cid))
         return self.set_status(ret_val, message, cid)
 
-    def _is_db_latest(self):
-        """Check if our database is already the latest one.
+    def _should_download_new_db(self):
+        """Check if there is a newer MaxMind db to download
 
         This check will not affect the daily download limit.
         For more info on the daily download, see https://dev.maxmind.com/geoip/updating-databases?lang=en#checking-for-the-latest-release-date
@@ -224,7 +226,7 @@ class MaxmindConnector(BaseConnector):
         self.debug_print('Checking if the current database is up to date.')
         db_url = DB_DOWNLOAD_URL.format(self._license_key)
 
-        r = requests.head(db_url)
+        r = requests.head(db_url, timeout=DEFAULT_REQUEST_TIMEOUT)
         if r.status_code != 200:
             raise Exception(
                 'Failed to check if the database is up-to-date. Status code: {0}. Error: {1}'.format(r.status_code, r.content))
@@ -237,6 +239,7 @@ class MaxmindConnector(BaseConnector):
         if not cached_last_modified_time:
             return True
 
+        # Check if the latest db on the server is newer than ours.
         dt = parser.parse(last_modified_timestamp)
         cached_dt = parser.parse(cached_last_modified_time)
         return dt > cached_dt
@@ -246,12 +249,13 @@ class MaxmindConnector(BaseConnector):
         self.debug_print('Updating database.')
 
         try:
-            status, msg = self._download_and_replace_db()
+            status, msg, response_headers = self._download_and_replace_db()
             action_result.set_status(status, msg)
         except Exception as e:
             error_msg = 'Error in downloading or replacing database.'
             action_result.set_status(phantom.APP_ERROR, error_msg, e)
 
+        action_result.add_data(dict(response_headers))
         return action_result.get_status()
 
     def _download_db(self, save_path, chunk_size=128):
@@ -259,7 +263,7 @@ class MaxmindConnector(BaseConnector):
         url = DB_DOWNLOAD_URL.format(self._license_key)
         self.debug_print('Downloading database from %s.' % url)
 
-        r = requests.get(url, stream=True)
+        r = requests.get(url, stream=True, timeout=DEFAULT_REQUEST_TIMEOUT)
         if r.status_code != 200:
             raise Exception(
                 'Failed to download database. Status Code: {0}. Error: {1}'.format(r.status_code, r.content))
@@ -272,6 +276,8 @@ class MaxmindConnector(BaseConnector):
         with open(save_path, 'wb') as fd:
             for chunk in r.iter_content(chunk_size=chunk_size):
                 fd.write(chunk)
+
+        return headers
 
     def _replace_db(self, tar_file_path):
         self.debug_print('Replacing old db with the new db.')
@@ -298,11 +304,11 @@ class MaxmindConnector(BaseConnector):
     def _download_and_replace_db(self):
         self.debug_print('Downloading database.')
 
-        self._download_db(MMDB_ZIP_FILE_PATH)
+        response_headers = self._download_db(MMDB_ZIP_FILE_PATH)
         self._replace_db(MMDB_ZIP_FILE_PATH)
 
         self.debug_print('Successfully updated database.')
-        return phantom.APP_SUCCESS, 'Successfully updated database.'
+        return phantom.APP_SUCCESS, 'Successfully updated database.', response_headers
 
     def handle_action(self, param):
         """
@@ -331,7 +337,7 @@ if __name__ == '__main__':
 
     if (len(sys.argv) < 2):
         print('No test json specified as input')
-        exit(0)
+        sys.exit(0)
 
     with open(sys.argv[1]) as f:
         in_json = f.read()
@@ -345,4 +351,4 @@ if __name__ == '__main__':
             print(format_exc())
         print(json.dumps(json.loads(ret_val), indent=4))
 
-    exit(0)
+    sys.exit(0)

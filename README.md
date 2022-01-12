@@ -2,7 +2,7 @@
 # MaxMind
 
 Publisher: Splunk  
-Connector Version: 2\.1\.11  
+Connector Version: 2\.2\.5  
 Product Vendor: MaxMind  
 Product Name: GeoIP2  
 Product Version Supported (regex): "\.\*"  
@@ -10,7 +10,7 @@ Minimum Product Version: 5\.0\.0
 
 This app provides IP geolocation with the included MaxMind database
 
-[comment]: # " File: readme.md"
+[comment]: # " File: README.md"
 [comment]: # "Copyright (c) 2016-2020 Splunk Inc."
 [comment]: # ""
 [comment]: # "Licensed under the Apache License, Version 2.0 (the 'License');"
@@ -46,6 +46,9 @@ Copyright (c) 2018
 ## POLL NOW
 
 POLL NOW can be used to investigate what gets run on each poll during ingestion.
+
+IMPORTANT: LicenseKey is required to be specified in your asset. It's used to fetch the latest
+MaxMind database.
 
 For more info on what gets run on each poll, see "Scheduled Polling" below.
 
@@ -142,6 +145,22 @@ No parameters are required for this action
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
 action\_result\.status | string | 
+action\_result\.data\.\*\.Date | string | 
+action\_result\.data\.\*\.ETag | string | 
+action\_result\.data\.\*\.Vary | string | 
+action\_result\.data\.\*\.CF\-Ray | string | 
+action\_result\.data\.\*\.Server | string | 
+action\_result\.data\.\*\.Expires | string | 
+action\_result\.data\.\*\.expect\-ct | string | 
+action\_result\.data\.\*\.Connection | string | 
+action\_result\.data\.\*\.Content\-Type | string | 
+action\_result\.data\.\*\.Accept\-Ranges | string | 
+action\_result\.data\.\*\.Cache\-Control | string | 
+action\_result\.data\.\*\.Last\-Modified | string | 
+action\_result\.data\.\*\.Content\-Length | string | 
+action\_result\.data\.\*\.CF\-Cache\-Status | string | 
+action\_result\.data\.\*\.X\-MaxMind\-Worker | string | 
+action\_result\.data\.\*\.Content\-Disposition | string | 
 action\_result\.message | string | 
 action\_result\.summary | string | 
 summary\.total\_objects | numeric | 
