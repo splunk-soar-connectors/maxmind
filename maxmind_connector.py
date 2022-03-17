@@ -97,10 +97,8 @@ class MaxmindConnector(BaseConnector):
         self.save_progress('Querying the Maxmind DB for the IP: {}'.format(self._ip_address))
 
         state_file = self.get_state_file_path()
-        stat = self._create_state_file(state_file)
 
         self.save_progress('paul: state_file: %s' % state_file)
-        self.save_progress('paul: _create_state_file: %s' % stat)
 
         try:
             _ = self.reader.city(self._ip_address)
