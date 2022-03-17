@@ -59,6 +59,7 @@ class MaxmindConnector(BaseConnector):
 
     def initialize(self):
         self._state = self.load_state()
+        self.save_progress('paul: Loading state: %s' % self._state)
 
         # Fetching the Python major version
         try:
