@@ -54,7 +54,7 @@ class MaxmindConnector(BaseConnector):
         self._state = {}
 
     def finalize(self):
-        self.save_state(self._state or {})
+        self.save_state(self._state)
         return phantom.APP_SUCCESS
 
     def initialize(self):
@@ -94,6 +94,12 @@ class MaxmindConnector(BaseConnector):
         # Create a ActionResult object to store the result
         self.save_progress('In action handler for: {0}'.format(self.get_action_identifier()))
         self.save_progress('Querying the Maxmind DB for the IP: {}'.format(self._ip_address))
+
+        state_file = self.get_state_file_path()
+        stat = self._create_state_file(state_file)
+
+        self.save_progress('paul: state_file: %s' % state_file)
+        self.save_progress('paul: _create_state_file: %s' % stat)
 
         try:
             _ = self.reader.city(self._ip_address)
