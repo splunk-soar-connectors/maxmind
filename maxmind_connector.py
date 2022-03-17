@@ -54,7 +54,7 @@ class MaxmindConnector(BaseConnector):
         self._state = {}
 
     def finalize(self):
-        self.save_state(self._state)
+        self.save_state(self._state or {})
         return phantom.APP_SUCCESS
 
     def initialize(self):
