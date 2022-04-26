@@ -2,16 +2,16 @@
 # MaxMind
 
 Publisher: Splunk  
-Connector Version: 2\.2\.5  
+Connector Version: 2\.2\.6  
 Product Vendor: MaxMind  
 Product Name: GeoIP2  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.0\.0  
+Minimum Product Version: 5\.2\.0  
 
 This app provides IP geolocation with the included MaxMind database
 
 [comment]: # " File: README.md"
-[comment]: # "Copyright (c) 2016-2020 Splunk Inc."
+[comment]: # "Copyright (c) 2016-2022 Splunk Inc."
 [comment]: # ""
 [comment]: # "Licensed under the Apache License, Version 2.0 (the 'License');"
 [comment]: # "you may not use this file except in compliance with the License."
