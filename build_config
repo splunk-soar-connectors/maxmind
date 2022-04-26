@@ -1,7 +1,7 @@
 {
   "download_files": [
         {
-          "source": "https://repo.splunk.com/artifactory/phantom-content/dependencies/GeoLite2-City.mmdb",
+          "source": "s3://soar-apps-dependencies-prd/maxmind/GeoLite2-City.mmdb",
           "destination": "./GeoLite2-City.mmdb"
         }
     ]
