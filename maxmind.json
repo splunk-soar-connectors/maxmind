@@ -5,7 +5,7 @@
     "type": "information",
     "publisher": "Splunk",
     "main_module": "maxmind_connector.py",
-    "app_version": "2.2.6",
+    "app_version": "2.2.7",
     "utctime_updated": "2022-04-26T17:17:54.000000Z",
     "package_name": "phantom_maxmind",
     "product_name": "GeoIP2",
