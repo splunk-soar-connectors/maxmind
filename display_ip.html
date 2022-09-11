@@ -1,0 +1,25 @@
+<p>
+    This is my very first custom widget
+</p>
+<p>
+    {result}
+</p>
+
+<!-- IPs -->
+{% if result.data %}
+<table class="wf-table-horizontal">
+    <tr>
+        <th>IP</th>
+    </tr>
+    {% for location in result.data %}
+    <tr>
+        <td>
+            {{ location }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<br>
+{% else %}
+<p> No IPs in results </p>
+{% endif %}
