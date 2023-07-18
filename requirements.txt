@@ -1,7 +1,6 @@
-certifi==2019.11.28
+certifi==2022.12.7
 geoip2==2.9.0
 idna==2.8
 maxminddb==1.5.1
 python-dateutil==2.8.1
-requests==2.26.0
 urllib3==1.26.6
