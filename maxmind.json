@@ -57,7 +57,7 @@
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/shared/urllib3-1.26.6-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/urllib3-1.26.18-py2.py3-none-any.whl"
             }
         ]
     },
@@ -97,7 +97,7 @@
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/py3/urllib3-2.1.0-py3-none-any.whl"
+                "input_file": "wheels/shared/urllib3-1.26.18-py2.py3-none-any.whl"
             }
         ]
     },
