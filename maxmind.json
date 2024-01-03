@@ -33,39 +33,11 @@
     "logo": "logo_maxmind.svg",
     "logo_dark": "logo_maxmind_dark.svg",
     "license": "Copyright (c) 2016-2024 Splunk Inc.",
-    "pip_dependencies": {
-        "wheel": [
-            {
-                "module": "geoip2",
-                "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "idna",
-                "input_file": "wheels/shared/idna-2.8-py2.py3-none-any.whl"
-            },
-            {
-                "module": "maxminddb",
-                "input_file": "wheels/py2/maxminddb-1.5.1-py2-none-any.whl"
-            },
-            {
-                "module": "python_dateutil",
-                "input_file": "wheels/shared/python_dateutil-2.8.1-py2.py3-none-any.whl"
-            },
-            {
-                "module": "six",
-                "input_file": "wheels/shared/six-1.16.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "urllib3",
-                "input_file": "wheels/shared/urllib3-1.26.6-py2.py3-none-any.whl"
-            }
-        ]
-    },
     "pip3_dependencies": {
         "wheel": [
             {
                 "module": "charset_normalizer",
-                "input_file": "wheels/py3/charset_normalizer-2.0.9-py3-none-any.whl"
+                "input_file": "wheels/py3/charset_normalizer-2.0.12-py3-none-any.whl"
             },
             {
                 "module": "geoip2",
@@ -86,6 +58,46 @@
             {
                 "module": "urllib3",
                 "input_file": "wheels/shared/urllib3-1.26.6-py2.py3-none-any.whl"
+            }
+        ]
+    },
+    "pip39_dependencies": {
+        "wheel": [
+            {
+                "module": "certifi",
+                "input_file": "wheels/py3/certifi-2023.11.17-py3-none-any.whl"
+            },
+            {
+                "module": "charset_normalizer",
+                "input_file": "wheels/py39/charset_normalizer-3.3.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+            },
+            {
+                "module": "geoip2",
+                "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "idna",
+                "input_file": "wheels/py3/idna-3.6-py3-none-any.whl"
+            },
+            {
+                "module": "maxminddb",
+                "input_file": "wheels/py3/maxminddb-1.5.1-py3-none-any.whl"
+            },
+            {
+                "module": "python_dateutil",
+                "input_file": "wheels/shared/python_dateutil-2.8.1-py2.py3-none-any.whl"
+            },
+            {
+                "module": "requests",
+                "input_file": "wheels/py3/requests-2.31.0-py3-none-any.whl"
+            },
+            {
+                "module": "six",
+                "input_file": "wheels/shared/six-1.16.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "urllib3",
+                "input_file": "wheels/py3/urllib3-2.1.0-py3-none-any.whl"
             }
         ]
     },
