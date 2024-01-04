@@ -22,7 +22,6 @@ MAXMIND_SUCCESS_MSG_IP_NOT_FOUND = "Successfully able to query the MaxMind DB fo
 MAXMIND_SUCCESS_MSG_IP_FOUND = "Successfully able to query the MaxMind DB for the IP: '{ip}'"
 
 MAXMIND_ERR_IP_NOT_FOUND = "IP not found"
-MAXMIND_SUCC_IP_FOUND = "IP found"
 MAXMIND_DEFAULT_IP_CONNECTIVITY = "8.8.8.8"
 
 # Jsons used either in params or result
