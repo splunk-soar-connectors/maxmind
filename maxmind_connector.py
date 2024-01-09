@@ -93,7 +93,7 @@ class MaxmindConnector(BaseConnector):
 
         # Create a ActionResult object to store the result
         self.save_progress('In action handler for: {0}'.format(self.get_action_identifier()))
-        self.save_progress('Querying the Maxmind DB for the IP: {}'.format(self._ip_address))
+        self.save_progress('Querying the MaxMind DB for the IP: {}'.format(self._ip_address))
 
         try:
             _ = self.reader.city(self._ip_address)
