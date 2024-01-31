@@ -64,10 +64,6 @@
     "pip3_dependencies": {
         "wheel": [
             {
-                "module": "certifi",
-                "input_file": "wheels/py3/certifi-2022.12.7-py3-none-any.whl"
-            },
-            {
                 "module": "geoip2",
                 "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
             },
@@ -498,10 +494,6 @@
     ],
     "pip39_dependencies": {
         "wheel": [
-            {
-                "module": "certifi",
-                "input_file": "wheels/py3/certifi-2022.12.7-py3-none-any.whl"
-            },
             {
                 "module": "geoip2",
                 "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
