@@ -5,7 +5,7 @@
     "type": "information",
     "publisher": "Splunk",
     "main_module": "maxmind_connector.py",
-    "app_version": "2.2.7",
+    "app_version": "2.2.6",
     "utctime_updated": "2022-04-26T17:17:54.000000Z",
     "package_name": "phantom_maxmind",
     "product_name": "GeoIP2",
@@ -46,34 +46,6 @@
             {
                 "module": "maxminddb",
                 "input_file": "wheels/py2/maxminddb-1.5.1-py2-none-any.whl"
-            },
-            {
-                "module": "python_dateutil",
-                "input_file": "wheels/shared/python_dateutil-2.8.1-py2.py3-none-any.whl"
-            },
-            {
-                "module": "six",
-                "input_file": "wheels/shared/six-1.16.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "urllib3",
-                "input_file": "wheels/shared/urllib3-1.26.18-py2.py3-none-any.whl"
-            }
-        ]
-    },
-    "pip3_dependencies": {
-        "wheel": [
-            {
-                "module": "geoip2",
-                "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "idna",
-                "input_file": "wheels/shared/idna-2.8-py2.py3-none-any.whl"
-            },
-            {
-                "module": "maxminddb",
-                "input_file": "wheels/py3/maxminddb-1.5.1-py3-none-any.whl"
             },
             {
                 "module": "python_dateutil",
