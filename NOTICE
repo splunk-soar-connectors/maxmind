@@ -13,6 +13,13 @@ Version: 1.5.1
 License: Apache 2.0
 MaxMind
 
+Library: idna
+Version: 2.8
+License: BSD 3
+Copyright 1991-2014 Unicode, Inc
+Copyright 2001-2014 Python Software Foundation; All Rights Reserved
+Copyright 2013-2018 Kim Davies
+
 Library: python-dateutil
 Version: 2.8.1
 License: Apache 2.0
