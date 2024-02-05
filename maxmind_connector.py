@@ -1,6 +1,6 @@
 # File: maxmind_connector.py
 #
-# Copyright (c) 2016-2020 Splunk Inc.
+# Copyright (c) 2016-2024 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -93,7 +93,7 @@ class MaxmindConnector(BaseConnector):
 
         # Create a ActionResult object to store the result
         self.save_progress('In action handler for: {0}'.format(self.get_action_identifier()))
-        self.save_progress('Querying the Maxmind DB for the IP: {}'.format(self._ip_address))
+        self.save_progress('Querying the MaxMind DB for the IP: {}'.format(self._ip_address))
 
         try:
             _ = self.reader.city(self._ip_address)

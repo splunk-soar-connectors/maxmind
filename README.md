@@ -2,16 +2,16 @@
 # MaxMind
 
 Publisher: Splunk  
-Connector Version: 2\.2\.5  
+Connector Version: 2.2.6  
 Product Vendor: MaxMind  
 Product Name: GeoIP2  
-Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.0\.0  
+Product Version Supported (regex): ".\*"  
+Minimum Product Version: 5.2.0  
 
 This app provides IP geolocation with the included MaxMind database
 
 [comment]: # " File: README.md"
-[comment]: # "Copyright (c) 2016-2020 Splunk Inc."
+[comment]: # "Copyright (c) 2016-2024 Splunk Inc."
 [comment]: # ""
 [comment]: # "Licensed under the Apache License, Version 2.0 (the 'License');"
 [comment]: # "you may not use this file except in compliance with the License."
@@ -74,17 +74,17 @@ The below configuration variables are required for this Connector to operate.  T
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
-**ip\_address** |  optional  | string | IP Address for testing connectivity \(default\: 8\.8\.8\.8\)
-**license\_key** |  optional  | password | MaxMind License key to download new databases
+**ip_address** |  optional  | string | IP Address for testing connectivity (default: 8.8.8.8)
+**license_key** |  optional  | password | MaxMind License key to download new databases
 
 ### Supported Actions  
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity\. This action queries the MaxMind DB for the IP mentioned in the configuration parameters  
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity. This action queries the MaxMind DB for the IP mentioned in the configuration parameters  
 [geolocate ip](#action-geolocate-ip) - Queries MaxMind for IP location info  
 [update data](#action-update-data) - Update database used to locate an ip  
 [on poll](#action-on-poll) - Update the database if there is a newer one on the server  
 
 ## action: 'test connectivity'
-Validate the asset configuration for connectivity\. This action queries the MaxMind DB for the IP mentioned in the configuration parameters
+Validate the asset configuration for connectivity. This action queries the MaxMind DB for the IP mentioned in the configuration parameters
 
 Type: **test**  
 Read only: **True**
@@ -107,28 +107,28 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **ip** |  required  | IP to geolocate | string |  `ip` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.data\.\*\.continent\_name | string | 
-action\_result\.data\.\*\.country\_iso\_code | string | 
-action\_result\.data\.\*\.country\_name | string | 
-action\_result\.data\.\*\.latitude | numeric | 
-action\_result\.data\.\*\.longitude | numeric | 
-action\_result\.parameter\.ip | string |  `ip` 
-action\_result\.parameter\.ip | string |  `ip` 
-action\_result\.data\.\*\.city\_name | string | 
-action\_result\.data\.\*\.postal\_code | string | 
-action\_result\.data\.\*\.as\_org | string | 
-action\_result\.data\.\*\.state\_iso\_code | string | 
-action\_result\.data\.\*\.state\_name | string | 
-action\_result\.data\.\*\.time\_zone | string | 
-action\_result\.summary\.city | string | 
-action\_result\.summary\.state | string | 
-action\_result\.summary\.country | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.data.\*.continent_name | string |  |   Asia 
+action_result.data.\*.country_iso_code | string |  |   IN 
+action_result.data.\*.country_name | string |  |   India 
+action_result.data.\*.latitude | numeric |  |   23.0333 
+action_result.data.\*.longitude | numeric |  |   72.6167 
+action_result.parameter.ip | string |  `ip`  |   203.88.139.34 
+action_result.parameter.ip | string |  `ip`  |   203.88.139.34 
+action_result.data.\*.city_name | string |  |   Ahmedabad 
+action_result.data.\*.postal_code | string |  |   380007 
+action_result.data.\*.as_org | string |  |  
+action_result.data.\*.state_iso_code | string |  |   GJ 
+action_result.data.\*.state_name | string |  |   Gujarat 
+action_result.data.\*.time_zone | string |  |   Asia/Kolkata 
+action_result.summary.city | string |  |   Ahmedabad 
+action_result.summary.state | string |  |   GJ 
+action_result.summary.country | string |  |   India 
+action_result.message | string |  |   City: Ahmedabad, State: GJ, Country: India 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'update data'
 Update database used to locate an ip
@@ -136,35 +136,35 @@ Update database used to locate an ip
 Type: **generic**  
 Read only: **False**
 
-This app uses the MaxMind GeoLite2 City database\.
+This app uses the MaxMind GeoLite2 City database.
 
 #### Action Parameters
 No parameters are required for this action
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.data\.\*\.Date | string | 
-action\_result\.data\.\*\.ETag | string | 
-action\_result\.data\.\*\.Vary | string | 
-action\_result\.data\.\*\.CF\-Ray | string | 
-action\_result\.data\.\*\.Server | string | 
-action\_result\.data\.\*\.Expires | string | 
-action\_result\.data\.\*\.expect\-ct | string | 
-action\_result\.data\.\*\.Connection | string | 
-action\_result\.data\.\*\.Content\-Type | string | 
-action\_result\.data\.\*\.Accept\-Ranges | string | 
-action\_result\.data\.\*\.Cache\-Control | string | 
-action\_result\.data\.\*\.Last\-Modified | string | 
-action\_result\.data\.\*\.Content\-Length | string | 
-action\_result\.data\.\*\.CF\-Cache\-Status | string | 
-action\_result\.data\.\*\.X\-MaxMind\-Worker | string | 
-action\_result\.data\.\*\.Content\-Disposition | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.data.\*.Date | string |  |   Mon, 03 Jan 2022 19:37:02 GMT 
+action_result.data.\*.ETag | string |  |   a3fd54f5dae1d3760e32ee743e21ffbc 
+action_result.data.\*.Vary | string |  |   Accept-Encoding 
+action_result.data.\*.CF-Ray | string |  |   6c7eadeaee340899-SEA 
+action_result.data.\*.Server | string |  |   cloudflare 
+action_result.data.\*.Expires | string |  |   Mon, 03 Jan 2022 19:37:02 GMT 
+action_result.data.\*.expect-ct | string |  |   max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct" 
+action_result.data.\*.Connection | string |  |   keep-alive 
+action_result.data.\*.Content-Type | string |  |   application/gzip 
+action_result.data.\*.Accept-Ranges | string |  |   bytes 
+action_result.data.\*.Cache-Control | string |  |   private, max-age=0 
+action_result.data.\*.Last-Modified | string |  |   Tue, 28 Dec 2021 17:52:24 GMT 
+action_result.data.\*.Content-Length | string |  |   35748628 
+action_result.data.\*.CF-Cache-Status | string |  |   DYNAMIC 
+action_result.data.\*.X-MaxMind-Worker | string |  |   enabled 
+action_result.data.\*.Content-Disposition | string |  |   attachment; filename=GeoLite2-City_20211228.tar.gz 
+action_result.message | string |  |   Successfully updated database. 
+action_result.summary | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'on poll'
 Update the database if there is a newer one on the server
@@ -175,11 +175,11 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**container\_id** |  optional  | Container IDs to limit the ingestion to | string | 
-**start\_time** |  optional  | Start of time range, in epoch time \(milliseconds\) | numeric | 
-**end\_time** |  optional  | End of time range, in epoch time \(milliseconds\) | numeric | 
-**container\_count** |  optional  | Maximum number of container records to query for | numeric | 
-**artifact\_count** |  optional  | Maximum number of artifact records to query for | numeric | 
+**container_id** |  optional  | Container IDs to limit the ingestion to | string | 
+**start_time** |  optional  | Start of time range, in epoch time (milliseconds) | numeric | 
+**end_time** |  optional  | End of time range, in epoch time (milliseconds) | numeric | 
+**container_count** |  optional  | Maximum number of container records to query for | numeric | 
+**artifact_count** |  optional  | Maximum number of artifact records to query for | numeric | 
 
 #### Action Output
 No Output

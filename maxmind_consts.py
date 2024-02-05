@@ -1,6 +1,6 @@
 # File: maxmind_consts.py
 #
-# Copyright (c) 2016-2020 Splunk Inc.
+# Copyright (c) 2016-2024 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ MAXMIND_SUCCESS_MSG_IP_NOT_FOUND = "Successfully able to query the MaxMind DB fo
 MAXMIND_SUCCESS_MSG_IP_FOUND = "Successfully able to query the MaxMind DB for the IP: '{ip}'"
 
 MAXMIND_ERR_IP_NOT_FOUND = "IP not found"
-MAXMIND_SUCC_IP_FOUND = "IP found"
 MAXMIND_DEFAULT_IP_CONNECTIVITY = "8.8.8.8"
 
 # Jsons used either in params or result
