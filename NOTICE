@@ -1,15 +1,15 @@
 Splunk SOAR MaxMind
-Copyright (c) 2016-2022 Splunk Inc.
+Copyright (c) 2016-2024 Splunk Inc.
 
 Third-party Software Attributions:
 
-Library: certifi
-Version: 2019.11.28
-License: Mozilla 2.0
-PyPA
-
 Library: geoip2
 Version: 2.9.0
+License: Apache 2.0
+MaxMind
+
+Library: maxminddb
+Version: 1.5.1
 License: Apache 2.0
 MaxMind
 
@@ -19,11 +19,6 @@ License: BSD 3
 Copyright 1991-2014 Unicode, Inc
 Copyright 2001-2014 Python Software Foundation; All Rights Reserved
 Copyright 2013-2018 Kim Davies
-
-Library: maxminddb
-Version: 1.5.1
-License: Apache 2.0
-MaxMind
 
 Library: python-dateutil
 Version: 2.8.1
@@ -36,11 +31,6 @@ Copyright 2015 - Paul Ganssle <paul@ganssle.io>
 Copyright 2015 - dateutil contributors (see AUTHORS file)
 Copyright 2017 Paul Ganssle <paul@ganssle.io>
 Copyright 2017 dateutil contributors (see AUTHORS file)
-
-Library: requests
-Version: 2.26.0
-License: Apache 2.0
-Kenneth Reitz
 
 Library: urllib3
 Version: 1.26.6
