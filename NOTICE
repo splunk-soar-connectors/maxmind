@@ -3,6 +3,13 @@ Copyright (c) 2016-2024 Splunk Inc.
 
 Third-party Software Attributions:
 
+Library: beautifulsoup4
+Version: 4.9.1
+License: MIT
+Copyright 2004-2017 Leonard Richardson
+Copyright 2004-2019 Leonard Richardson
+Copyright 2018 Isaac Muse
+
 Library: geoip2
 Version: 2.9.0
 License: Apache 2.0

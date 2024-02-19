@@ -13,6 +13,7 @@
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
 import ipaddress
+import json
 import os
 import pathlib
 import sys
@@ -22,6 +23,7 @@ from datetime import datetime
 import geoip2.database
 import phantom.app as phantom
 import requests
+from bs4 import UnicodeDammit
 from dateutil import parser
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
@@ -66,6 +68,9 @@ class MaxmindConnector(BaseConnector):
         except:
             return self.set_status(phantom.APP_ERROR, "Error occurred while getting the Phantom server's Python major version.")
 
+        # custom contain for validating ipv6
+        self.set_validator('ipv6', self._is_ip)
+
         # Validate the configuration parameters
         config = self.get_config()
         self._ip_address = config.get('ip_address', MAXMIND_DEFAULT_IP_CONNECTIVITY)
@@ -73,7 +78,7 @@ class MaxmindConnector(BaseConnector):
 
         try:
             if self._python_version == 2:
-                ipaddress.ip_address(unicode(self._ip_address))
+                ipaddress.ip_address(UnicodeDammit(self._ip_address).unicode_markup.encode('utf-8'))
             else:
                 ipaddress.ip_address(self._ip_address)
         except:
@@ -88,6 +93,20 @@ class MaxmindConnector(BaseConnector):
 
         self.save_progress(MAXMIND_MSG_DB_LOADED)
         return phantom.APP_SUCCESS
+
+    def _is_ip(self, input_ip_address):
+        """
+        Function that checks given address and return True if address is valid IPv4 or IPV6 address.
+
+        :param input_ip_address: IP address
+        :return: status (success/failure)
+        """
+
+        try:
+            ipaddress.ip_address(input_ip_address)
+        except Exception:
+            return False
+        return True
 
     def _handle_test_connectivity(self, param):
 
@@ -329,26 +348,70 @@ class MaxmindConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import json
-    # import pudb
-    from traceback import format_exc
+    import argparse
+    import sys
 
-    # pudb.set_trace()
+    import pudb
 
-    if (len(sys.argv) < 2):
-        print('No test json specified as input')
-        sys.exit(0)
+    pudb.set_trace()
 
-    with open(sys.argv[1]) as f:
+    argparser = argparse.ArgumentParser()
+
+    argparser.add_argument('input_test_json', help='Input Test JSON file')
+    argparser.add_argument('-u', '--username', help='username', required=False)
+    argparser.add_argument('-p', '--password', help='password', required=False)
+    argparser.add_argument('-v', '--verify', action='store_true', help='verify', required=False, default=False)
+
+    args = argparser.parse_args()
+    session_id = None
+
+    username = args.username
+    password = args.password
+    verify = args.verify
+
+    if (username is not None and password is None):
+        # User specified a username but not a password, so ask
+        import getpass
+
+        password = getpass.getpass("Password: ")
+
+    if (username and password):
+        try:
+            print("Accessing the Login page")
+            r = requests.get(  # nosemgrep: python.requests.best-practice.use-timeout.use-timeout
+                BaseConnector._get_phantom_base_url() + "login", verify=verify)
+            csrftoken = r.cookies['csrftoken']
+
+            data = dict()
+            data['username'] = username
+            data['password'] = password
+            data['csrfmiddlewaretoken'] = csrftoken
+
+            headers = dict()
+            headers['Cookie'] = 'csrftoken=' + csrftoken
+            headers['Referer'] = BaseConnector._get_phantom_base_url() + 'login'
+
+            print("Logging into Platform to get the session id")
+            r2 = requests.post(  # nosemgrep: python.requests.best-practice.use-timeout.use-timeout
+                BaseConnector._get_phantom_base_url() + "login", verify=verify, data=data, headers=headers)
+            session_id = r2.cookies['sessionid']
+        except Exception as e:
+            print("Unable to get session id from the platfrom. Error: " + str(e))
+            sys.exit(1)
+
+    with open(args.input_test_json) as f:
         in_json = f.read()
         in_json = json.loads(in_json)
         print(json.dumps(in_json, indent=4))
+
         connector = MaxmindConnector()
         connector.print_progress_message = True
-        try:
-            ret_val = connector._handle_action(json.dumps(in_json), None)
-        except:
-            print(format_exc())
+
+        if (session_id is not None):
+            in_json['user_session_token'] = session_id
+            connector._set_csrf_info(csrftoken, headers['Referer'])
+
+        ret_val = connector._handle_action(json.dumps(in_json), None)
         print(json.dumps(json.loads(ret_val), indent=4))
 
     sys.exit(0)

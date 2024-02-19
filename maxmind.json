@@ -10,13 +10,13 @@
         }
     ],
     "main_module": "maxmind_connector.py",
-    "app_version": "2.2.6",
+    "app_version": "2.2.7",
     "utctime_updated": "2022-04-26T17:17:54.000000Z",
     "package_name": "phantom_maxmind",
     "product_name": "GeoIP2",
     "product_vendor": "MaxMind",
     "product_version_regex": ".*",
-    "min_phantom_version": "5.2.0",
+    "min_phantom_version": "6.1.0",
     "fips_compliant": true,
     "latest_tested_versions": [
         "GeoLite2-City MMDB Updated 2020-11-03"
@@ -38,34 +38,6 @@
     "logo": "logo_maxmind.svg",
     "logo_dark": "logo_maxmind_dark.svg",
     "license": "Copyright (c) 2016-2024 Splunk Inc.",
-    "pip_dependencies": {
-        "wheel": [
-            {
-                "module": "geoip2",
-                "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "ipaddress",
-                "input_file": "wheels/shared/ipaddress-1.0.23-py2.py3-none-any.whl"
-            },
-            {
-                "module": "maxminddb",
-                "input_file": "wheels/py2/maxminddb-1.5.1-py2-none-any.whl"
-            },
-            {
-                "module": "python_dateutil",
-                "input_file": "wheels/shared/python_dateutil-2.8.1-py2.py3-none-any.whl"
-            },
-            {
-                "module": "six",
-                "input_file": "wheels/shared/six-1.16.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "urllib3",
-                "input_file": "wheels/shared/urllib3-1.26.18-py2.py3-none-any.whl"
-            }
-        ]
-    },
     "actions": [
         {
             "action": "test connectivity",
@@ -89,10 +61,11 @@
             "parameters": {
                 "ip": {
                     "order": 0,
-                    "description": "IP to geolocate",
+                    "description": "IP(ipv4/ipv6) to geolocate",
                     "data_type": "string",
                     "contains": [
-                        "ip", "ipv6"
+                        "ip",
+                        "ipv6"
                     ],
                     "primary": true,
                     "required": true,
@@ -160,7 +133,8 @@
                         "203.88.139.34"
                     ],
                     "contains": [
-                        "ip", "ipv6"
+                        "ip",
+                        "ipv6"
                     ],
                     "map_info": "IP Address"
                 },
@@ -171,7 +145,8 @@
                         "203.88.139.34"
                     ],
                     "contains": [
-                        "ip", "ipv6"
+                        "ip",
+                        "ipv6"
                     ],
                     "map_info": "name"
                 },
@@ -472,6 +447,10 @@
     "pip39_dependencies": {
         "wheel": [
             {
+                "module": "beautifulsoup4",
+                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
+            },
+            {
                 "module": "geoip2",
                 "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
             },
@@ -490,6 +469,10 @@
             {
                 "module": "six",
                 "input_file": "wheels/shared/six-1.16.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "soupsieve",
+                "input_file": "wheels/py3/soupsieve-2.5-py3-none-any.whl"
             },
             {
                 "module": "urllib3",
