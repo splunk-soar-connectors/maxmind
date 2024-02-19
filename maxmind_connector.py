@@ -349,7 +349,6 @@ class MaxmindConnector(BaseConnector):
 if __name__ == '__main__':
 
     import argparse
-    import sys
 
     import pudb
 
