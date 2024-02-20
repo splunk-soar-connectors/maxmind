@@ -16,7 +16,7 @@
     "product_name": "GeoIP2",
     "product_vendor": "MaxMind",
     "product_version_regex": ".*",
-    "min_phantom_version": "6.1.0",
+    "min_phantom_version": "6.1.1",
     "fips_compliant": true,
     "latest_tested_versions": [
         "GeoLite2-City MMDB Updated 2020-11-03"
