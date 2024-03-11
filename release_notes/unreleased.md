@@ -1,2 +1,2 @@
 **Unreleased**
-* Added 'ipv6' input parameter support for 'geolocate ip' action
+* Added the support for 'ipv6' in 'geolocate ip' action
