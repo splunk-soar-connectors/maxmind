@@ -23,7 +23,6 @@ from datetime import datetime
 import geoip2.database
 import phantom.app as phantom
 import requests
-from bs4 import UnicodeDammit
 from dateutil import parser
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
@@ -77,10 +76,7 @@ class MaxmindConnector(BaseConnector):
         self._license_key = config.get('license_key')
 
         try:
-            if self._python_version == 2:
-                ipaddress.ip_address(UnicodeDammit(self._ip_address).unicode_markup.encode('utf-8'))
-            else:
-                ipaddress.ip_address(self._ip_address)
+            ipaddress.ip_address(self._ip_address)
         except:
             return self.set_status(phantom.APP_ERROR, "Please provide a valid IP Address in the configuration parameters")
 

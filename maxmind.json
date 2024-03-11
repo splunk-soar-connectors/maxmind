@@ -61,7 +61,7 @@
             "parameters": {
                 "ip": {
                     "order": 0,
-                    "description": "IP(ipv4/ipv6) to geolocate",
+                    "description": "IP (IPv4/IPv6) to geolocate",
                     "data_type": "string",
                     "contains": [
                         "ip",
@@ -125,18 +125,6 @@
                     "example_values": [
                         72.6167
                     ]
-                },
-                {
-                    "data_path": "action_result.parameter.ip",
-                    "data_type": "string",
-                    "example_values": [
-                        "203.88.139.34"
-                    ],
-                    "contains": [
-                        "ip",
-                        "ipv6"
-                    ],
-                    "map_info": "IP Address"
                 },
                 {
                     "data_path": "action_result.parameter.ip",
@@ -414,20 +402,17 @@
                 "container_id": {
                     "data_type": "string",
                     "order": 0,
-                    "description": "Container IDs to limit the ingestion to",
-                    "allow_list": true
+                    "description": "Container IDs to limit the ingestion to"
                 },
                 "start_time": {
                     "data_type": "numeric",
                     "order": 1,
-                    "description": "Start of time range, in epoch time (milliseconds)",
-                    "verbose": "If not specified, the default is past 10 days."
+                    "description": "Start of time range, in epoch time (milliseconds)"
                 },
                 "end_time": {
                     "data_type": "numeric",
                     "order": 2,
-                    "description": "End of time range, in epoch time (milliseconds)",
-                    "verbose": "If not specified, the default is now."
+                    "description": "End of time range, in epoch time (milliseconds)"
                 },
                 "container_count": {
                     "data_type": "numeric",
@@ -447,10 +432,6 @@
     "pip39_dependencies": {
         "wheel": [
             {
-                "module": "beautifulsoup4",
-                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
-            },
-            {
                 "module": "geoip2",
                 "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
             },
@@ -469,10 +450,6 @@
             {
                 "module": "six",
                 "input_file": "wheels/shared/six-1.16.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "soupsieve",
-                "input_file": "wheels/py3/soupsieve-2.5-py3-none-any.whl"
             },
             {
                 "module": "urllib3",
