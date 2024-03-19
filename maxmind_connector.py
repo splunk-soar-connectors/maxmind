@@ -61,12 +61,6 @@ class MaxmindConnector(BaseConnector):
     def initialize(self):
         self._state = self.load_state()
 
-        # Fetching the Python major version
-        try:
-            self._python_version = int(sys.version_info[0])
-        except:
-            return self.set_status(phantom.APP_ERROR, "Error occurred while getting the Phantom server's Python major version.")
-
         # custom contain for validating ipv6
         self.set_validator('ipv6', self._is_ip)
 
