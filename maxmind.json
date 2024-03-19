@@ -395,6 +395,7 @@
         {
             "action": "on poll",
             "description": "Update the database if there is a newer one on the server",
+            "verbose": "This action replaces the maxmind database if database is updated.",
             "type": "ingest",
             "identifier": "on_poll",
             "read_only": true,
