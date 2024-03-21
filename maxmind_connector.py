@@ -51,7 +51,6 @@ class MaxmindConnector(BaseConnector):
 
         self.reader = None
         self._ip_address = None
-        self._python_version = None
         self._state = {}
 
     def finalize(self):
