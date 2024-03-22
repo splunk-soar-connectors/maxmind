@@ -2,11 +2,11 @@
 # MaxMind
 
 Publisher: Splunk  
-Connector Version: 2.2.6  
+Connector Version: 2.3.0  
 Product Vendor: MaxMind  
 Product Name: GeoIP2  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 5.2.0  
+Minimum Product Version: 6.1.1  
 
 This app provides IP geolocation with the included MaxMind database
 
@@ -104,7 +104,7 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**ip** |  required  | IP to geolocate | string |  `ip` 
+**ip** |  required  | IP (IPv4/IPv6) to geolocate | string |  `ip`  `ipv6` 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
@@ -115,8 +115,7 @@ action_result.data.\*.country_iso_code | string |  |   IN
 action_result.data.\*.country_name | string |  |   India 
 action_result.data.\*.latitude | numeric |  |   23.0333 
 action_result.data.\*.longitude | numeric |  |   72.6167 
-action_result.parameter.ip | string |  `ip`  |   203.88.139.34 
-action_result.parameter.ip | string |  `ip`  |   203.88.139.34 
+action_result.parameter.ip | string |  `ip`  `ipv6`  |   203.88.139.34 
 action_result.data.\*.city_name | string |  |   Ahmedabad 
 action_result.data.\*.postal_code | string |  |   380007 
 action_result.data.\*.as_org | string |  |  
@@ -171,6 +170,8 @@ Update the database if there is a newer one on the server
 
 Type: **ingest**  
 Read only: **True**
+
+This action replaces the maxmind database if database is updated.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS

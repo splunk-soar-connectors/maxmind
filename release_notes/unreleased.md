@@ -1,2 +1,1 @@
 **Unreleased**
-* Added the support for IPv6 in 'geolocate ip' action
