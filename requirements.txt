@@ -1,5 +1,5 @@
 geoip2==2.9.0
-idna==2.8
+idna==3.7
 maxminddb==1.5.1
 python-dateutil==2.8.1
-urllib3==1.26.18
+urllib3==1.26.19
