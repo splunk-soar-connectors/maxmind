@@ -430,15 +430,59 @@
             "versions": "EQ(*)"
         }
     ],
-    "pip_dependencies": {
+    "pip39_dependencies": {
         "wheel": [
             {
+                "module": "aiohappyeyeballs",
+                "input_file": "wheels/py3/aiohappyeyeballs-2.4.3-py3-none-any.whl"
+            },
+            {
+                "module": "aiohttp",
+                "input_file": "wheels/py39/aiohttp-3.10.10-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
+                "module": "aiosignal",
+                "input_file": "wheels/py3/aiosignal-1.3.1-py3-none-any.whl"
+            },
+            {
+                "module": "async_timeout",
+                "input_file": "wheels/py3/async_timeout-4.0.3-py3-none-any.whl"
+            },
+            {
+                "module": "attrs",
+                "input_file": "wheels/py3/attrs-24.2.0-py3-none-any.whl"
+            },
+            {
+                "module": "frozenlist",
+                "input_file": "wheels/py39/frozenlist-1.4.1-cp39-cp39-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
                 "module": "geoip2",
-                "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/geoip2-4.8.0-py2.py3-none-any.whl"
             },
             {
                 "module": "maxminddb",
-                "input_file": "wheels/py3/maxminddb-1.5.1-py3-none-any.whl"
+                "input_file": "wheels/py39/maxminddb-2.6.2-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
+                "module": "multidict",
+                "input_file": "wheels/py39/multidict-6.1.0-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
+                "module": "propcache",
+                "input_file": "wheels/py39/propcache-0.2.0-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
+                "module": "setuptools",
+                "input_file": "wheels/py3/setuptools-75.1.0-py3-none-any.whl"
+            },
+            {
+                "module": "typing_extensions",
+                "input_file": "wheels/py3/typing_extensions-4.12.2-py3-none-any.whl"
+            },
+            {
+                "module": "yarl",
+                "input_file": "wheels/py39/yarl-1.15.2-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
             }
         ]
     }
