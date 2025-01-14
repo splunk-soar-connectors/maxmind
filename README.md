@@ -2,11 +2,11 @@
 # MaxMind
 
 Publisher: Splunk  
-Connector Version: 2.3.0  
+Connector Version: 2.3.1  
 Product Vendor: MaxMind  
 Product Name: GeoIP2  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 6.1.1  
+Minimum Product Version: 6.2.1  
 
 This app provides IP geolocation with the included MaxMind database
 
