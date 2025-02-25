@@ -1,5 +1,5 @@
 Splunk SOAR MaxMind
-Copyright (c) 2016-2024 Splunk Inc.
+Copyright (c) 2016-2025 Splunk Inc.
 
 Third-party Software Attributions:
 
@@ -16,9 +16,9 @@ MaxMind
 Library: idna
 Version: 2.8
 License: BSD 3
-Copyright 1991-2014 Unicode, Inc
+Copyright 1991-2025 Unicode, Inc
 Copyright 2001-2014 Python Software Foundation; All Rights Reserved
-Copyright 2013-2018 Kim Davies
+Copyright 2013-2025 Kim Davies
 
 Library: python-dateutil
 Version: 2.8.1
@@ -35,4 +35,4 @@ Copyright 2017 dateutil contributors (see AUTHORS file)
 Library: urllib3
 Version: 1.26.6
 License: MIT
-Copyright 2008-2020 Andrey Petrov and contributors
+Copyright 2008-2025 Andrey Petrov and contributors
