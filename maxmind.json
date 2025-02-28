@@ -16,7 +16,7 @@
     "product_name": "GeoIP2",
     "product_vendor": "MaxMind",
     "product_version_regex": ".*",
-    "min_phantom_version": "6.2.1",
+    "min_phantom_version": "6.3.0",
     "fips_compliant": true,
     "latest_tested_versions": [
         "GeoLite2-City MMDB Updated 2024-03-11"
@@ -37,7 +37,7 @@
     "consolidate_widgets": false,
     "logo": "logo_maxmind.svg",
     "logo_dark": "logo_maxmind_dark.svg",
-    "license": "Copyright (c) 2016-2024 Splunk Inc.",
+    "license": "Copyright (c) 2016-2025 Splunk Inc.",
     "actions": [
         {
             "action": "test connectivity",
