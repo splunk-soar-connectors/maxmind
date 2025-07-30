@@ -10,8 +10,8 @@
         }
     ],
     "main_module": "maxmind_connector.py",
-    "app_version": "2.3.2",
-    "utctime_updated": "2025-04-11T18:40:08.668109Z",
+    "app_version": "2.3.3",
+    "utctime_updated": "2025-07-30T17:48:43.840581Z",
     "package_name": "phantom_maxmind",
     "product_name": "GeoIP2",
     "product_vendor": "MaxMind",
@@ -21,7 +21,10 @@
     "latest_tested_versions": [
         "GeoLite2-City MMDB Updated 2024-03-11"
     ],
-    "python_version": ["3.9", "3.13"],
+    "python_version": [
+        "3.9",
+        "3.13"
+    ],
     "configuration": {
         "ip_address": {
             "data_type": "string",
