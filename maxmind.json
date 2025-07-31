@@ -444,5 +444,17 @@
                 "input_file": "wheels/py3/maxminddb-1.5.1-py3-none-any.whl"
             }
         ]
+    },
+    "pip313_dependencies": {
+        "wheel": [
+            {
+                "module": "geoip2",
+                "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "maxminddb",
+                "input_file": "wheels/py3/maxminddb-1.5.1-py3-none-any.whl"
+            }
+        ]
     }
 }
