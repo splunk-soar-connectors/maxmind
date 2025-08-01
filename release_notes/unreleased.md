@@ -1,2 +1,1 @@
 **Unreleased**
-* Update python 3.13 dependencies in the app json
