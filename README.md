@@ -1,7 +1,7 @@
 # MaxMind
 
 Publisher: Splunk \
-Connector Version: 2.3.4 \
+Connector Version: 2.3.5 \
 Product Vendor: MaxMind \
 Product Name: GeoIP2 \
 Minimum Product Version: 6.2.1
