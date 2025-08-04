@@ -1,2 +1,2 @@
 **Unreleased**
-* Update python 3.13 dependencies in the app json
+* Remove Python 3.13 from Python version

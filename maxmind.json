@@ -21,10 +21,7 @@
     "latest_tested_versions": [
         "GeoLite2-City MMDB Updated 2024-03-11"
     ],
-    "python_version": [
-        "3.9",
-        "3.13"
-    ],
+    "python_version": "3.9",
     "configuration": {
         "ip_address": {
             "data_type": "string",
