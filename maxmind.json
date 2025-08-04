@@ -10,8 +10,8 @@
         }
     ],
     "main_module": "maxmind_connector.py",
-    "app_version": "2.3.3",
-    "utctime_updated": "2025-07-30T17:48:43.840581Z",
+    "app_version": "2.3.5",
+    "utctime_updated": "2025-08-01T20:34:26.128068Z",
     "package_name": "phantom_maxmind",
     "product_name": "GeoIP2",
     "product_vendor": "MaxMind",
