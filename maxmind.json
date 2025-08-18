@@ -21,7 +21,7 @@
     "latest_tested_versions": [
         "GeoLite2-City MMDB Updated 2024-03-11"
     ],
-    "python_version": "3.9",
+    "python_version": "3.9, 3.13",
     "configuration": {
         "ip_address": {
             "data_type": "string",
@@ -433,24 +433,96 @@
     "pip39_dependencies": {
         "wheel": [
             {
+                "module": "aiohappyeyeballs",
+                "input_file": "wheels/py3/aiohappyeyeballs-2.6.1-py3-none-any.whl"
+            },
+            {
+                "module": "aiohttp",
+                "input_file": "wheels/py39/aiohttp-3.12.15-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
+                "module": "aiosignal",
+                "input_file": "wheels/py3/aiosignal-1.4.0-py3-none-any.whl"
+            },
+            {
+                "module": "async_timeout",
+                "input_file": "wheels/py3/async_timeout-5.0.1-py3-none-any.whl"
+            },
+            {
+                "module": "attrs",
+                "input_file": "wheels/py3/attrs-25.3.0-py3-none-any.whl"
+            },
+            {
+                "module": "frozenlist",
+                "input_file": "wheels/py39/frozenlist-1.7.0-cp39-cp39-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl"
+            },
+            {
                 "module": "geoip2",
-                "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/geoip2-5.1.0-py3-none-any.whl"
             },
             {
                 "module": "maxminddb",
-                "input_file": "wheels/py3/maxminddb-1.5.1-py3-none-any.whl"
+                "input_file": "wheels/py39/maxminddb-2.8.2-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
+                "module": "multidict",
+                "input_file": "wheels/py39/multidict-6.6.4-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
+                "module": "propcache",
+                "input_file": "wheels/py39/propcache-0.3.2-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
+                "module": "typing_extensions",
+                "input_file": "wheels/py3/typing_extensions-4.14.1-py3-none-any.whl"
+            },
+            {
+                "module": "yarl",
+                "input_file": "wheels/py39/yarl-1.20.1-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
             }
         ]
     },
     "pip313_dependencies": {
         "wheel": [
             {
+                "module": "aiohappyeyeballs",
+                "input_file": "wheels/py3/aiohappyeyeballs-2.6.1-py3-none-any.whl"
+            },
+            {
+                "module": "aiohttp",
+                "input_file": "wheels/py313/aiohttp-3.12.15-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
+                "module": "aiosignal",
+                "input_file": "wheels/py3/aiosignal-1.4.0-py3-none-any.whl"
+            },
+            {
+                "module": "attrs",
+                "input_file": "wheels/py3/attrs-25.3.0-py3-none-any.whl"
+            },
+            {
+                "module": "frozenlist",
+                "input_file": "wheels/py313/frozenlist-1.7.0-cp313-cp313-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl"
+            },
+            {
                 "module": "geoip2",
-                "input_file": "wheels/shared/geoip2-2.9.0-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/geoip2-5.1.0-py3-none-any.whl"
             },
             {
                 "module": "maxminddb",
-                "input_file": "wheels/py3/maxminddb-1.5.1-py3-none-any.whl"
+                "input_file": "wheels/py313/maxminddb-2.8.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
+                "module": "multidict",
+                "input_file": "wheels/py313/multidict-6.6.4-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
+                "module": "propcache",
+                "input_file": "wheels/py313/propcache-0.3.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            },
+            {
+                "module": "yarl",
+                "input_file": "wheels/py313/yarl-1.20.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
             }
         ]
     }
