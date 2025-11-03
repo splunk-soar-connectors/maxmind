@@ -6,7 +6,7 @@ Third Party Software Attributions:
 
 Library: geoip2 - 5.1.0
 Homepage: https://www.maxmind.com/
-License: UNKNOWN
+License: Apache-2.0
 License Text:
 
 
@@ -217,7 +217,7 @@ License Text:
 
 Library: maxminddb - 2.8.2
 Homepage: https://www.maxmind.com/
-License: UNKNOWN
+License: Apache-2.0
 License Text:
 
 
