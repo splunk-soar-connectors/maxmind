@@ -1,9 +1,9 @@
 # MaxMind
 
-Publisher: Splunk \
-Connector Version: 2.3.7 \
-Product Vendor: MaxMind \
-Product Name: GeoIP2 \
+Publisher: Splunk <br>
+Connector Version: 2.3.7 <br>
+Product Vendor: MaxMind <br>
+Product Name: GeoIP2 <br>
 Minimum Product Version: 6.2.1
 
 This app provides IP geolocation with the included MaxMind database
@@ -63,16 +63,16 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity. This action queries the MaxMind DB for the IP mentioned in the configuration parameters \
-[geolocate ip](#action-geolocate-ip) - Queries MaxMind for IP location info \
-[update data](#action-update-data) - Update database used to locate an ip \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity. This action queries the MaxMind DB for the IP mentioned in the configuration parameters <br>
+[geolocate ip](#action-geolocate-ip) - Queries MaxMind for IP location info <br>
+[update data](#action-update-data) - Update database used to locate an ip <br>
 [on poll](#action-on-poll) - Update the database if there is a newer one on the server
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity. This action queries the MaxMind DB for the IP mentioned in the configuration parameters
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -87,7 +87,7 @@ No Output
 
 Queries MaxMind for IP location info
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -124,7 +124,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Update database used to locate an ip
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 This app uses the MaxMind GeoLite2 City database.
@@ -163,7 +163,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Update the database if there is a newer one on the server
 
-Type: **ingest** \
+Type: **ingest** <br>
 Read only: **True**
 
 This action replaces the maxmind database if database is updated.
