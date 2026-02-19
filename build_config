@@ -1,8 +1,0 @@
-{
-  "download_files": [
-        {
-          "source": "s3://soar-apps-dependencies-prd/maxmind/GeoLite2-City.mmdb",
-          "destination": "./GeoLite2-City.mmdb"
-        }
-    ]
-}
