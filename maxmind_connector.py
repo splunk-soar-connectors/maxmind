@@ -1,6 +1,6 @@
 # File: maxmind_connector.py
 #
-# Copyright (c) 2016-2025 Splunk Inc.
+# Copyright (c) 2016-2026 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import pathlib
 import sys
 import tarfile
 from datetime import datetime
+from urllib.parse import quote_plus
 
 import geoip2.database
 import phantom.app as phantom
@@ -95,6 +96,14 @@ class MaxmindConnector(BaseConnector):
         except Exception:
             return False
         return True
+
+    def _redact_license_key(self, message):
+        """Remove the configured license key from user-visible error messages."""
+        message = str(message)
+        if not self._license_key:
+            return message
+
+        return message.replace(self._license_key, "<redacted>").replace(quote_plus(self._license_key), "<redacted>")
 
     def _handle_test_connectivity(self, param):
         # Create a ActionResult object to store the result
@@ -195,7 +204,7 @@ class MaxmindConnector(BaseConnector):
                 self.save_progress("The database is already up to date.")
                 return self._create_ingested_container()
         except Exception as e:
-            err_msg = f"Failed to poll. Reason: {e}"
+            err_msg = f"Failed to poll. Reason: {self._redact_license_key(e)}"
             self.debug_print(err_msg)
             return self.set_status(phantom.APP_ERROR, err_msg)
 
@@ -249,13 +258,14 @@ class MaxmindConnector(BaseConnector):
     def _handle_update_db(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.debug_print("Updating database.")
+        response_headers = {}
 
         try:
             status, msg, response_headers = self._download_and_replace_db()
             action_result.set_status(status, msg)
         except Exception as e:
             error_msg = "Error in downloading or replacing database."
-            action_result.set_status(phantom.APP_ERROR, error_msg, e)
+            action_result.set_status(phantom.APP_ERROR, error_msg, self._redact_license_key(e))
 
         action_result.add_data(dict(response_headers))
         return action_result.get_status()
@@ -263,7 +273,7 @@ class MaxmindConnector(BaseConnector):
     def _download_db(self, save_path, chunk_size=128):
         """Download the latest database from MaxMind."""
         url = DB_DOWNLOAD_URL.format(self._license_key)
-        self.debug_print(f"Downloading database from {url}.")
+        self.debug_print("Downloading database from the configured MaxMind endpoint.")
 
         r = requests.get(url, stream=True, timeout=DEFAULT_REQUEST_TIMEOUT)
         if r.status_code != 200:
