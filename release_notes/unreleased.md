@@ -1,3 +1,1 @@
 **Unreleased**
-
-* Redacted the MaxMind license key from download errors and debug output.
