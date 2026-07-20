@@ -1,5 +1,5 @@
 Splunk SOAR App: MaxMind
-Copyright (c) 2016-2025 Splunk Inc.
+Copyright (c) 2016-2026 Splunk Inc.
 Third Party Software Attributions:
 
 @@@@============================================================================
@@ -422,4 +422,3 @@ License Text:
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
