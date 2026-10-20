@@ -7,6 +7,9 @@
     "contributors": [
         {
             "name": "Brady Davis"
+        },
+        {
+            "name": "Gary Ian Rokas"
         }
     ],
     "main_module": "maxmind_connector.py",
@@ -523,6 +526,50 @@
             {
                 "module": "yarl",
                 "input_file": "wheels/py39/yarl-1.22.0-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl"
+            }
+        ]
+    },
+    "pip313_dependencies_aarch64": {
+        "wheel": [
+            {
+                "module": "aiohappyeyeballs",
+                "input_file": "wheels/py3/aiohappyeyeballs-2.7.1-py3-none-any.whl"
+            },
+            {
+                "module": "aiohttp",
+                "input_file": "wheels/py313/aiohttp-3.14.1-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl"
+            },
+            {
+                "module": "aiosignal",
+                "input_file": "wheels/py3/aiosignal-1.4.0-py3-none-any.whl"
+            },
+            {
+                "module": "attrs",
+                "input_file": "wheels/py3/attrs-26.1.0-py3-none-any.whl"
+            },
+            {
+                "module": "frozenlist",
+                "input_file": "wheels/py313/frozenlist-1.8.0-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl"
+            },
+            {
+                "module": "geoip2",
+                "input_file": "wheels/py3/geoip2-5.1.0-py3-none-any.whl"
+            },
+            {
+                "module": "maxminddb",
+                "input_file": "wheels/py313/maxminddb-2.8.2-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl"
+            },
+            {
+                "module": "multidict",
+                "input_file": "wheels/py313/multidict-6.7.1-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl"
+            },
+            {
+                "module": "propcache",
+                "input_file": "wheels/py313/propcache-0.5.2-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl"
+            },
+            {
+                "module": "yarl",
+                "input_file": "wheels/py313/yarl-1.24.2-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl"
             }
         ]
     }
