@@ -61,22 +61,24 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **ip_address** | optional | string | IP Address for testing connectivity (default: 8.8.8.8) |
 **license_key** | optional | password | MaxMind license key to download databases and authenticate web-service requests |
 **account_id** | optional | string | MaxMind account ID for live GeoIP/GeoLite web-service requests |
-**web_service** | optional | string | GeoLite (default) or GeoIP; used by Make Request |
+**web_service** | optional | string | MaxMind web service used by the Make Request action |
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity. This action queries the MaxMind DB for the IP mentioned in the configuration parameters <br>
-[make request](#action-make-request) - Query the live MaxMind GeoIP or GeoLite web service <br>
+[test connectivity](#action-test-connectivity) - test connectivity <br>
+[make request](#action-make-request) - Make a live, authenticated GeoIP or GeoLite web-service request. <br>
 [geolocate ip](#action-geolocate-ip) - Queries MaxMind for IP location info <br>
 [update data](#action-update-data) - Update database used to locate an ip <br>
-[on poll](#action-on-poll) - Update the database if there is a newer one on the server
+[on poll](#action-on-poll) - Update the database if there is a newer one and yield an empty container.
 
 ## action: 'test connectivity'
 
-Validate the asset configuration for connectivity. This action queries the local MaxMind database for the configured IP. When both `account_id` and `license_key` are configured, it also validates access to the selected live GeoIP or GeoLite web service.
+test connectivity
 
 Type: **test** <br>
 Read only: **True**
+
+Basic test for app.
 
 #### Action Parameters
 
@@ -86,38 +88,47 @@ No parameters are required for this action
 
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.status | string | | success failed |
+action_result.status | string | | success failure |
 action_result.message | string | | |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'make request'
 
-Query the live MaxMind GeoIP or GeoLite web service. Configure `account_id` and `license_key` on the asset, then select `GeoLite` or `GeoIP` as the web service. The action supports `GET` requests only and returns the raw JSON response.
+Make a live, authenticated GeoIP or GeoLite web-service request.
 
 Type: **generic** <br>
 Read only: **False**
 
+'make request' action for the app. Used to handle arbitrary HTTP requests with the app's asset
+
 #### Action Parameters
 
-PARAMETER | REQUIRED | DESCRIPTION | TYPE
---------- | -------- | ----------- | ----
-**http_method** | required | Must be `GET` | string
-**endpoint** | required | GeoIP service path, for example `/geoip/v2.1/city/8.8.8.8` | string
-**headers** | optional | Additional request headers as a JSON object; authentication headers are managed by the app | string
-**query_parameters** | optional | Query parameters as a JSON object or query string | string
-**body** | optional | Not supported for MaxMind GeoIP web-service requests | string
-**timeout** | optional | Request timeout in seconds | numeric
-**verify_ssl** | optional | Whether to verify the SSL certificate | boolean
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**http_method** | required | The HTTP method to use for the request. | string | |
+**endpoint** | required | GeoIP web-service path, for example /geoip/v2.1/city/8.8.8.8 | string | |
+**headers** | optional | The headers to send with the request (JSON object). An example is {'Content-Type': 'application/json'} | string | |
+**query_parameters** | optional | Parameters to append to the URL (JSON object or query string). An example is ?key=value&key2=value2 | string | |
+**body** | optional | The body to send with the request (JSON object). An example is {'key': 'value', 'key2': 'value2'} | string | |
+**timeout** | optional | The timeout for the request in seconds. | numeric | |
+**verify_ssl** | optional | Whether to verify the SSL certificate. Default is True. | boolean | |
 
 #### Action Output
 
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.status | string | | success failed |
-action_result.data.*.status_code | numeric | | 200 401 404 |
-action_result.data.*.response_body | string | | {"country":{"iso_code":"US"}} |
+action_result.status | string | | success failure |
 action_result.message | string | | |
+action_result.parameter.http_method | string | | |
+action_result.parameter.endpoint | string | | |
+action_result.parameter.headers | string | | |
+action_result.parameter.query_parameters | string | | |
+action_result.parameter.body | string | | |
+action_result.parameter.timeout | numeric | | |
+action_result.parameter.verify_ssl | boolean | | |
+action_result.data.\*.status_code | numeric | | 200 404 500 |
+action_result.data.\*.response_body | string | | {"key": "value"} |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -138,25 +149,25 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.status | string | | success failed |
-action_result.data.\*.continent_name | string | | Asia |
-action_result.data.\*.country_iso_code | string | | IN |
+action_result.status | string | | success failure |
+action_result.message | string | | |
+action_result.parameter.ip | string | `ip` `ipv6` | |
+action_result.data.\*.city_name | string | | Ahmedabad |
+action_result.data.\*.state_name | string | | Gujarat |
+action_result.data.\*.state_iso_code | string | | GJ |
 action_result.data.\*.country_name | string | | India |
+action_result.data.\*.country_iso_code | string | | IN |
+action_result.data.\*.continent_name | string | | Asia |
 action_result.data.\*.latitude | numeric | | 23.0333 |
 action_result.data.\*.longitude | numeric | | 72.6167 |
-action_result.parameter.ip | string | `ip` `ipv6` | 203.88.139.34 |
-action_result.data.\*.city_name | string | | Ahmedabad |
-action_result.data.\*.postal_code | string | | 380007 |
-action_result.data.\*.as_org | string | | |
-action_result.data.\*.as_number | numeric | | |
-action_result.data.\*.domain | string | | |
-action_result.data.\*.state_iso_code | string | | GJ |
-action_result.data.\*.state_name | string | | Gujarat |
 action_result.data.\*.time_zone | string | | Asia/Kolkata |
-action_result.summary.city | string | | Ahmedabad |
-action_result.summary.state | string | | GJ |
-action_result.summary.country | string | | India |
-action_result.message | string | | City: Ahmedabad, State: GJ, Country: India |
+action_result.data.\*.postal_code | string | | 380007 |
+action_result.data.\*.as_number | numeric | | |
+action_result.data.\*.as_org | string | | |
+action_result.data.\*.domain | string | | |
+action_result.summary.city | string | | |
+action_result.summary.state | string | | |
+action_result.summary.country | string | | |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -177,59 +188,49 @@ No parameters are required for this action
 
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
-action_result.status | string | | success failed |
-action_result.data.\*.Date | string | | Mon, 03 Jan 2022 19:37:02 GMT |
-action_result.data.\*.ETag | string | | a3fd54f5dae1d3760e32ee743e21ffbc |
-action_result.data.\*.Vary | string | | Accept-Encoding |
-action_result.data.\*.CF-Ray | string | | 6c7eadeaee340899-SEA |
-action_result.data.\*.Server | string | | cloudflare |
-action_result.data.\*.Expires | string | | Mon, 03 Jan 2022 19:37:02 GMT |
-action_result.data.\*.expect-ct | string | | max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct" |
-action_result.data.\*.Connection | string | | keep-alive |
-action_result.data.\*.Content-Type | string | | application/gzip |
-action_result.data.\*.Accept-Ranges | string | | bytes |
-action_result.data.\*.Cache-Control | string | | private, max-age=0 |
-action_result.data.\*.Last-Modified | string | | Tue, 28 Dec 2021 17:52:24 GMT |
-action_result.data.\*.Content-Length | string | | 35748628 |
-action_result.data.\*.CF-Cache-Status | string | | DYNAMIC |
-action_result.data.\*.X-MaxMind-Worker | string | | enabled |
-action_result.data.\*.Content-Disposition | string | | attachment; filename=GeoLite2-City_20211228.tar.gz |
-action_result.message | string | | Successfully updated database. |
+action_result.status | string | | success failure |
+action_result.message | string | | |
+action_result.data.\*.Date | string | | |
+action_result.data.\*.ETag | string | | |
+action_result.data.\*.Expires | string | | |
+action_result.data.\*.Last-Modified | string | | |
+action_result.data.\*.Content-Type | string | | |
+action_result.data.\*.Content-Length | string | | |
+action_result.data.\*.Vary | string | | |
+action_result.data.\*.CF-Ray | string | | |
+action_result.data.\*.Server | string | | |
+action_result.data.\*.expect-ct | string | | |
+action_result.data.\*.Connection | string | | |
+action_result.data.\*.Accept-Ranges | string | | |
+action_result.data.\*.Cache-Control | string | | |
+action_result.data.\*.CF-Cache-Status | string | | |
+action_result.data.\*.X-MaxMind-Worker | string | | |
+action_result.data.\*.Content-Disposition | string | | |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'on poll'
 
-Update the database if there is a newer one on the server
+Update the database if there is a newer one and yield an empty container.
 
 Type: **ingest** <br>
 Read only: **True**
 
-This action replaces the maxmind database if database is updated.
+Callback action for the on_poll ingest functionality
 
 #### Action Parameters
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**container_id** | optional | Container IDs to limit the ingestion to | string | |
-**start_time** | optional | Start of time range, in epoch time (milliseconds) | numeric | |
-**end_time** | optional | End of time range, in epoch time (milliseconds) | numeric | |
-**container_count** | optional | Maximum number of container records to query for | numeric | |
-**artifact_count** | optional | Maximum number of artifact records to query for | numeric | |
+**start_time** | optional | Start of time range, in epoch time (milliseconds). | numeric | |
+**end_time** | optional | End of time range, in epoch time (milliseconds). | numeric | |
+**container_count** | optional | Maximum number of container records to query for. | numeric | |
+**artifact_count** | optional | Maximum number of artifact records to query for. | numeric | |
+**container_id** | optional | Comma-separated list of container IDs to limit the ingestion to. | string | |
 
 #### Action Output
 
-DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
---------- | ---- | -------- | --------------
-action_result.status | string | | success failed |
-action_result.message | string | | |
-action_result.parameter.container_id | string | | |
-action_result.parameter.start_time | numeric | | |
-action_result.parameter.end_time | numeric | | |
-action_result.parameter.container_count | numeric | | |
-action_result.parameter.artifact_count | numeric | | |
-summary.total_objects | numeric | | 1 |
-summary.total_objects_successful | numeric | | 1 |
+No Output
 
 ______________________________________________________________________
 

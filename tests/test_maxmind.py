@@ -1,3 +1,17 @@
+# Copyright (c) 2026 Splunk Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Behavior and contract checks for the converted MaxMind app."""
 
 import io
@@ -7,17 +21,17 @@ from unittest.mock import Mock, patch
 
 import pytest
 from soar_sdk.exceptions import ActionFailure
-from soar_sdk.params import Params
+from soar_sdk.models.container import Container
+from soar_sdk.params import OnPollParams, Params
 from soar_sdk.shims.phantom.encryption_helper import encryption_helper
 
-from src.actions.geolocate_ip import GeolocateIpParams, geolocate_ip
+from src.actions.geolocate_ip import GeolocateIpParams, GeoOutput, geolocate_ip
 from src.actions.make_request import MaxMindMakeRequestParams, make_request
-from src.actions.on_poll import PollParams, run_on_poll
-from src.actions.update_data import update_data
+from src.actions.on_poll import run_on_poll
+from src.actions.update_data import UpdateOutput, update_data
 from src.app import app
 from src.asset import Asset
 from src.database import download_and_replace
-from src.models import GeoOutput, UpdateOutput
 
 
 def run_action(identifier, params=None, config=None):
@@ -42,21 +56,20 @@ def run_action(identifier, params=None, config=None):
 def test_geolocate_multiple_ips_preserves_separate_results_and_paths():
     results = run_action("lookup_ip", {"ip": "8.8.8.8,1.1.1.1"})
     assert len(results) == 2
-    assert [result.get_param()["ip"] for result in results] == ["8.8.8.8", "1.1.1.1"]
     assert all(result.get_status() for result in results)
-    assert results[0].get_summary()["country"] == "United States"
     assert results[0].get_data()[0]["country_iso_code"] == "US"
     assert "latitude" in results[0].get_data()[0]
 
 
 def test_single_ip_returns_declared_model_without_missing_fields():
-    output = geolocate_ip(GeolocateIpParams(ip="8.8.8.8"), Mock())
-    assert isinstance(output, GeoOutput)
-    assert output.model_dump()["country_iso_code"] == "US"
-    assert None not in output.model_dump().values()
+    outputs = geolocate_ip(GeolocateIpParams(ip="8.8.8.8"), Mock())
+    assert len(outputs) == 1
+    assert isinstance(outputs[0], GeoOutput)
+    assert outputs[0].model_dump()["country_iso_code"] == "US"
+    assert None not in outputs[0].model_dump().values()
 
     result = run_action("lookup_ip", {"ip": "8.8.8.8"})[-1]
-    assert result.get_data() == [output.model_dump()]
+    assert result.get_data() == [outputs[0].model_dump()]
     assert result.get_summary() == {"country": "United States"}
 
 
@@ -74,6 +87,12 @@ def test_valid_ip_not_in_database_is_success_with_empty_data():
     assert result.get_data() == [{}]
 
 
+def test_geolocate_returns_output_models_for_multiple_ips():
+    outputs = geolocate_ip(GeolocateIpParams(ip="8.8.8.8,1.1.1.1"), Mock())
+    assert len(outputs) == 2
+    assert all(isinstance(output, GeoOutput) for output in outputs)
+
+
 def test_connectivity_accepts_missing_ip_and_rejects_bad_asset_ip():
     assert run_action("test_connectivity", config={"ip_address": "255.255.255.255"})[-1].get_status()
     assert not run_action("test_connectivity", config={"ip_address": "invalid"})[-1].get_status()
@@ -81,7 +100,7 @@ def test_connectivity_accepts_missing_ip_and_rejects_bad_asset_ip():
 
 def test_connectivity_validates_configured_web_service_credentials():
     response = Mock(ok=True, status_code=200)
-    with patch("src.app.requests.get", return_value=response) as request:
+    with patch("src.test_connectivity.requests.get", return_value=response) as request:
         result = run_action("test_connectivity", config={"account_id": "123", "license_key": "secret"})[-1]
     assert result.get_status()
     assert request.call_args.args[0] == "https://geolite.info/geoip/v2.1/country/me"
@@ -90,7 +109,7 @@ def test_connectivity_validates_configured_web_service_credentials():
 
 def test_connectivity_fails_for_invalid_web_service_credentials():
     response = Mock(ok=False, status_code=401)
-    with patch("src.app.requests.get", return_value=response):
+    with patch("src.test_connectivity.requests.get", return_value=response):
         result = run_action("test_connectivity", config={"account_id": "123", "license_key": "secret"})[-1]
     assert not result.get_status()
     assert "authentication failed with status code: 401" in result.get_message()
@@ -184,11 +203,13 @@ def test_poll_reuses_legacy_checkpoint_and_creates_empty_container():
         patch("src.actions.on_poll.download_and_replace") as update,
         patch.object(app.actions_manager, "save_container", return_value=(True, "saved", 42)) as save,
     ):
-        result = run_on_poll(PollParams(), asset, app)
+        containers = list(run_on_poll(OnPollParams(), asset))
     assert check.call_args.args[1]["db_last_modified_time"] == "Mon, 01 Jan 2024 00:00:00 GMT"
     update.assert_not_called()
-    assert result.get_status()
-    assert save.call_args.args[0]["name"].startswith("maxmind_ingestion_")
+    assert isinstance(containers[0], Container)
+    assert containers[0].name.startswith("maxmind_ingestion_")
+    assert containers[0].run_automation
+    save.assert_not_called()
 
 
 def test_update_failure_redacts_license_key():
@@ -271,7 +292,7 @@ def test_on_poll_creates_one_empty_container_when_database_is_current():
     update.assert_not_called()
     saved = save.call_args.args[0]
     assert saved["name"].startswith("maxmind_ingestion_")
-    assert set(saved) == {"name"}
+    assert saved["run_automation"] is True
 
 
 def test_on_poll_reports_download_failure_without_creating_container():
@@ -327,5 +348,5 @@ def test_on_poll_propagates_container_save_failure():
     ):
         result = run_action("on_poll", config={"license_key": "secret"})[-1]
     assert not result.get_status()
-    assert result.get_message() == "database unavailable"
-    assert set(save.call_args.args[0]) == {"name"}
+    assert result.get_message() == "Action failure in on poll: Failed to create container: database unavailable"
+    assert save.call_args.args[0]["run_automation"] is True

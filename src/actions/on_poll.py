@@ -1,11 +1,26 @@
-"""Refresh the MaxMind City database and create one empty ingested container."""
+# Copyright (c) 2026 Splunk Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
+"""Refresh the MaxMind City database and yield one empty ingested container."""
+
+from collections.abc import Iterator
 from datetime import UTC, datetime
 
-from soar_sdk.action_results import ActionResult
-from soar_sdk.app import App
+from soar_sdk.exceptions import ActionFailure
 from soar_sdk.logging import getLogger
-from soar_sdk.params import MAX_COUNT_VALUE, Param, Params
+from soar_sdk.models.container import Container
+from soar_sdk.params import MAX_COUNT_VALUE, OnPollParams
 
 from ..asset import Asset
 from ..database import check_newer, download_and_replace, redact
@@ -14,18 +29,10 @@ from ..database import check_newer, download_and_replace, redact
 logger = getLogger()
 
 
-class PollParams(Params):
-    container_id: str | None = Param(description="Container IDs to limit the ingestion to", required=False)
-    start_time: float | None = Param(description="Start of time range, in epoch time (milliseconds)", required=False)
-    end_time: float | None = Param(description="End of time range, in epoch time (milliseconds)", required=False)
-    container_count: float | None = Param(description="Maximum number of container records to query for", required=False)
-    artifact_count: float | None = Param(description="Maximum number of artifact records to query for", required=False)
-
-
-def run_on_poll(params: PollParams, asset: Asset, app: App) -> ActionResult:
+def run_on_poll(params: OnPollParams, asset: Asset) -> Iterator[Container]:
     key = asset.license_key or ""
     if not key:
-        return ActionResult(False, "License key is required to fetch MaxMind database.")
+        raise ActionFailure("License key is required to fetch MaxMind database.")
     state = asset.ingest_state
     if "db_last_modified_time" not in state:
         legacy = state.backend.load_state() or {}
@@ -39,9 +46,6 @@ def run_on_poll(params: PollParams, asset: Asset, app: App) -> ActionResult:
         else:
             logger.progress("The database is already up to date.")
     except Exception as exc:
-        return ActionResult(False, f"Failed to poll. Reason: {redact(exc, key)}")
+        raise ActionFailure(f"Failed to poll. Reason: {redact(exc, key)}") from exc
     name = f"maxmind_ingestion_{datetime.now(UTC):%Y-%m-%dT%H:%M:%SZ}"
-    # Keep the key absent, as in the legacy save_container call. SOAR decides when to run automation.
-    success, message, _container_id = app.actions_manager.save_container({"name": name})
-    # Polling has no output row; preserve the container save status and message.
-    return ActionResult(bool(success), message)
+    yield Container(name=name, run_automation=True)

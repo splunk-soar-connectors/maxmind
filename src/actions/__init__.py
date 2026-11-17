@@ -1,15 +1,31 @@
+# Copyright (c) 2026 Splunk Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Register MaxMind actions."""
 
-from soar_sdk.action_results import ActionOutput
+from collections.abc import Iterator
+
 from soar_sdk.app import App
+from soar_sdk.models.container import Container
+from soar_sdk.params import OnPollParams
 
 from ..asset import Asset
-from ..models import GeoOutput, GeoSummary, UpdateOutput
 from ..render_meta import preserve_render_metadata
-from .geolocate_ip import GeolocateIpParams, geolocate_ip
+from .geolocate_ip import GeolocateIpParams, GeoOutput, GeoSummary, geolocate_ip
 from .make_request import make_request
-from .on_poll import PollParams, run_on_poll
-from .update_data import update_data
+from .on_poll import run_on_poll
+from .update_data import UpdateOutput, update_data
 
 
 def register_actions(app: App) -> App:
@@ -36,19 +52,10 @@ def register_actions(app: App) -> App:
         output_class=UpdateOutput,
     )
 
-    def on_poll(params: PollParams, asset: Asset):
-        return run_on_poll(params, asset, app)
+    @app.on_poll()
+    def on_poll(params: OnPollParams, asset: Asset) -> Iterator[Container]:
+        """Update the database if there is a newer one and yield an empty container."""
+        yield from run_on_poll(params, asset)
 
-    app.register_action(
-        action=on_poll,
-        name="on poll",
-        identifier="on_poll",
-        description="Update the database if there is a newer one on the server",
-        verbose="This action replaces the maxmind database if database is updated.",
-        action_type="ingest",
-        read_only=True,
-        params_class=PollParams,
-        output_class=ActionOutput,
-    )
     preserve_render_metadata(app)
     return app
