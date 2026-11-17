@@ -53,12 +53,14 @@ def run_action(identifier, params=None, config=None):
     return app.actions_manager.get_results()
 
 
-def test_geolocate_multiple_ips_preserves_separate_results_and_paths():
+def test_geolocate_multiple_ips_returns_declared_output_rows():
     results = run_action("lookup_ip", {"ip": "8.8.8.8,1.1.1.1"})
     assert len(results) == 2
     assert all(result.get_status() for result in results)
     assert results[0].get_data()[0]["country_iso_code"] == "US"
     assert "latitude" in results[0].get_data()[0]
+    assert results[0].get_summary() == {}
+    assert results[1].get_summary() == {}
 
 
 def test_single_ip_returns_declared_model_without_missing_fields():
@@ -87,7 +89,7 @@ def test_valid_ip_not_in_database_is_success_with_empty_data():
     assert result.get_data() == [{}]
 
 
-def test_geolocate_returns_output_models_for_multiple_ips():
+def test_geolocate_returns_results_for_multiple_ips():
     outputs = geolocate_ip(GeolocateIpParams(ip="8.8.8.8,1.1.1.1"), Mock())
     assert len(outputs) == 2
     assert all(isinstance(output, GeoOutput) for output in outputs)

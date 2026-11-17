@@ -92,6 +92,7 @@ def geolocate_ip(params: GeolocateIpParams, soar: SOARClient) -> list[GeoOutput]
         raise ActionFailure("Please provide a valid IP Address")
     results = []
     for ip in ips:
+        summary = {}
         try:
             response = lookup(ip)
         except geoip2.errors.AddressNotFoundError:
