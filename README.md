@@ -4,7 +4,7 @@ Publisher: Splunk <br>
 Connector Version: 2.4.2 <br>
 Product Vendor: MaxMind <br>
 Product Name: GeoIP2 <br>
-Minimum Product Version: 6.2.1
+Minimum Product Version: 7.0.0
 
 This app provides IP geolocation with the included MaxMind database
 
@@ -59,18 +59,21 @@ This table lists the configuration variables required to operate MaxMind. These 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
 **ip_address** | optional | string | IP Address for testing connectivity (default: 8.8.8.8) |
-**license_key** | optional | password | MaxMind License key to download new databases |
+**license_key** | optional | password | MaxMind license key to download databases and authenticate web-service requests |
+**account_id** | optional | string | MaxMind account ID for live GeoIP/GeoLite web-service requests |
+**web_service** | optional | string | GeoLite (default) or GeoIP; used by Make Request |
 
 ### Supported Actions
 
 [test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity. This action queries the MaxMind DB for the IP mentioned in the configuration parameters <br>
+[make request](#action-make-request) - Query the live MaxMind GeoIP or GeoLite web service <br>
 [geolocate ip](#action-geolocate-ip) - Queries MaxMind for IP location info <br>
 [update data](#action-update-data) - Update database used to locate an ip <br>
 [on poll](#action-on-poll) - Update the database if there is a newer one on the server
 
 ## action: 'test connectivity'
 
-Validate the asset configuration for connectivity. This action queries the MaxMind DB for the IP mentioned in the configuration parameters
+Validate the asset configuration for connectivity. This action queries the local MaxMind database for the configured IP. When both `account_id` and `license_key` are configured, it also validates access to the selected live GeoIP or GeoLite web service.
 
 Type: **test** <br>
 Read only: **True**
@@ -81,7 +84,42 @@ No parameters are required for this action
 
 #### Action Output
 
-No Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.message | string | | |
+summary.total_objects | numeric | | 1 |
+summary.total_objects_successful | numeric | | 1 |
+
+## action: 'make request'
+
+Query the live MaxMind GeoIP or GeoLite web service. Configure `account_id` and `license_key` on the asset, then select `GeoLite` or `GeoIP` as the web service. The action supports `GET` requests only and returns the raw JSON response.
+
+Type: **generic** <br>
+Read only: **False**
+
+#### Action Parameters
+
+PARAMETER | REQUIRED | DESCRIPTION | TYPE
+--------- | -------- | ----------- | ----
+**http_method** | required | Must be `GET` | string
+**endpoint** | required | GeoIP service path, for example `/geoip/v2.1/city/8.8.8.8` | string
+**headers** | optional | Additional request headers as a JSON object; authentication headers are managed by the app | string
+**query_parameters** | optional | Query parameters as a JSON object or query string | string
+**body** | optional | Not supported for MaxMind GeoIP web-service requests | string
+**timeout** | optional | Request timeout in seconds | numeric
+**verify_ssl** | optional | Whether to verify the SSL certificate | boolean
+
+#### Action Output
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.data.*.status_code | numeric | | 200 401 404 |
+action_result.data.*.response_body | string | | {"country":{"iso_code":"US"}} |
+action_result.message | string | | |
+summary.total_objects | numeric | | 1 |
+summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'geolocate ip'
 
@@ -110,6 +148,8 @@ action_result.parameter.ip | string | `ip` `ipv6` | 203.88.139.34 |
 action_result.data.\*.city_name | string | | Ahmedabad |
 action_result.data.\*.postal_code | string | | 380007 |
 action_result.data.\*.as_org | string | | |
+action_result.data.\*.as_number | numeric | | |
+action_result.data.\*.domain | string | | |
 action_result.data.\*.state_iso_code | string | | GJ |
 action_result.data.\*.state_name | string | | Gujarat |
 action_result.data.\*.time_zone | string | | Asia/Kolkata |
@@ -155,7 +195,6 @@ action_result.data.\*.CF-Cache-Status | string | | DYNAMIC |
 action_result.data.\*.X-MaxMind-Worker | string | | enabled |
 action_result.data.\*.Content-Disposition | string | | attachment; filename=GeoLite2-City_20211228.tar.gz |
 action_result.message | string | | Successfully updated database. |
-action_result.summary | string | | |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -180,7 +219,17 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 
 #### Action Output
 
-No Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failed |
+action_result.message | string | | |
+action_result.parameter.container_id | string | | |
+action_result.parameter.start_time | numeric | | |
+action_result.parameter.end_time | numeric | | |
+action_result.parameter.container_count | numeric | | |
+action_result.parameter.artifact_count | numeric | | |
+summary.total_objects | numeric | | 1 |
+summary.total_objects_successful | numeric | | 1 |
 
 ______________________________________________________________________
 
