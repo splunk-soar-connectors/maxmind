@@ -126,11 +126,12 @@ def test_make_request_calls_configured_web_service_with_basic_authentication():
         headers='{"Accept-Language": "en"}',
         query_parameters='{"pretty": "true"}',
     )
-    with patch("src.actions.make_request.requests.get", return_value=response) as request:
+    with patch("src.actions.make_request.requests.request", return_value=response) as request:
         output = make_request(params, asset)
     assert output.status_code == 200
     assert output.response_body == response.text
-    assert request.call_args.args[0] == "https://geolite.info/geoip/v2.1/city/8.8.8.8"
+    assert request.call_args.kwargs["url"] == "https://geolite.info/geoip/v2.1/city/8.8.8.8"
+    assert request.call_args.kwargs["method"] == "GET"
     assert request.call_args.kwargs["auth"] == ("123", "secret")
     assert request.call_args.kwargs["headers"] == {"Accept": "application/json", "Accept-Language": "en"}
     assert request.call_args.kwargs["params"] == {"pretty": "true"}
@@ -138,7 +139,7 @@ def test_make_request_calls_configured_web_service_with_basic_authentication():
 
 def test_make_request_returns_api_errors_as_response_data():
     response = Mock(status_code=401, text='{"code": "AUTHORIZATION_INVALID"}')
-    with patch("src.actions.make_request.requests.get", return_value=response):
+    with patch("src.actions.make_request.requests.request", return_value=response):
         result = run_action(
             "make_request",
             {"http_method": "GET", "endpoint": "/geoip/v2.1/country/8.8.8.8"},
@@ -152,19 +153,7 @@ def test_make_request_returns_api_errors_as_response_data():
     "params, asset",
     [
         (
-            MaxMindMakeRequestParams(http_method="POST", endpoint="/geoip/v2.1/city/8.8.8.8"),
-            Asset(account_id="123", license_key="secret"),
-        ),
-        (
             MaxMindMakeRequestParams(http_method="GET", endpoint="https://geolite.info/geoip/v2.1/city/8.8.8.8"),
-            Asset(account_id="123", license_key="secret"),
-        ),
-        (
-            MaxMindMakeRequestParams(http_method="GET", endpoint="/geoip/v2.1/insights/8.8.8.8"),
-            Asset(account_id="123", license_key="secret"),
-        ),
-        (
-            MaxMindMakeRequestParams(http_method="GET", endpoint="/geoip/v2.1/city/8.8.8.8", body="{}"),
             Asset(account_id="123", license_key="secret"),
         ),
         (
@@ -184,6 +173,30 @@ def test_make_request_returns_api_errors_as_response_data():
 def test_make_request_rejects_unsupported_or_incomplete_requests(params, asset):
     with pytest.raises(ActionFailure):
         make_request(params, asset)
+
+
+def test_make_request_passes_arbitrary_method_endpoint_and_body_to_configured_host():
+    response = Mock(status_code=202, text='{"accepted": true}')
+    params = MaxMindMakeRequestParams(
+        http_method="POST",
+        endpoint="/future/api/v3/lookup",
+        headers='{"Content-Type": "application/json"}',
+        query_parameters="mode=bulk",
+        body='{"ips": ["8.8.8.8", "1.1.1.1"]}',
+    )
+    with patch("src.actions.make_request.requests.request", return_value=response) as request:
+        output = make_request(params, Asset(account_id="123", license_key="secret", web_service="GeoLite"))
+    assert output.status_code == 202
+    assert request.call_args.kwargs == {
+        "method": "POST",
+        "url": "https://geolite.info/future/api/v3/lookup",
+        "auth": ("123", "secret"),
+        "headers": {"Accept": "application/json", "Content-Type": "application/json"},
+        "params": "mode=bulk",
+        "data": '{"ips": ["8.8.8.8", "1.1.1.1"]}',
+        "timeout": 30,
+        "verify": True,
+    }
 
 
 def test_poll_requires_license_key():

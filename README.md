@@ -66,7 +66,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 ### Supported Actions
 
 [test connectivity](#action-test-connectivity) - test connectivity <br>
-[make request](#action-make-request) - Make a live, authenticated GeoIP or GeoLite web-service request. <br>
+[make request](#action-make-request) - Make an authenticated request to an endpoint on the configured MaxMind host. <br>
 [geolocate ip](#action-geolocate-ip) - Queries MaxMind for IP location info <br>
 [update data](#action-update-data) - Update database used to locate an ip <br>
 [on poll](#action-on-poll) - Update the database if there is a newer one and yield an empty container.
@@ -95,7 +95,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'make request'
 
-Make a live, authenticated GeoIP or GeoLite web-service request.
+Make an authenticated request to an endpoint on the configured MaxMind host.
 
 Type: **generic** <br>
 Read only: **False**
@@ -107,7 +107,7 @@ Read only: **False**
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **http_method** | required | The HTTP method to use for the request. | string | |
-**endpoint** | required | GeoIP web-service path, for example /geoip/v2.1/city/8.8.8.8 | string | |
+**endpoint** | required | Path on the configured MaxMind web-service host, for example /geoip/v2.1/city/8.8.8.8 | string | |
 **headers** | optional | The headers to send with the request (JSON object). An example is {'Content-Type': 'application/json'} | string | |
 **query_parameters** | optional | Parameters to append to the URL (JSON object or query string). An example is ?key=value&key2=value2 | string | |
 **body** | optional | The body to send with the request (JSON object). An example is {'key': 'value', 'key2': 'value2'} | string | |

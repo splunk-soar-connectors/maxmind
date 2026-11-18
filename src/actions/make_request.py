@@ -14,7 +14,6 @@
 
 """Call the authenticated MaxMind GeoIP or GeoLite web service."""
 
-import ipaddress
 import json
 
 import requests
@@ -23,7 +22,7 @@ from soar_sdk.exceptions import ActionFailure
 from soar_sdk.params import MakeRequestParams, Param
 
 from ..asset import Asset
-from ..client import SERVICES, web_service_base_url
+from ..client import web_service_base_url
 
 
 DEFAULT_TIMEOUT = 30
@@ -31,32 +30,20 @@ DEFAULT_TIMEOUT = 30
 
 class MaxMindMakeRequestParams(MakeRequestParams):
     endpoint: str = Param(
-        description="GeoIP web-service path, for example /geoip/v2.1/city/8.8.8.8",
+        description="Path on the configured MaxMind web-service host, for example /geoip/v2.1/city/8.8.8.8",
         required=True,
     )
 
 
-def _endpoint(value: str, web_service: str) -> str:
+def _endpoint(value: str) -> str:
     endpoint = value.strip()
     if endpoint.startswith(("http://", "https://")):
-        raise ActionFailure("Provide a GeoIP web-service path, not a full URL")
+        raise ActionFailure("Provide an endpoint path; the MaxMind host is selected from the asset")
+    if not endpoint or endpoint.startswith("//"):
+        raise ActionFailure("Endpoint must be a non-empty path on the configured MaxMind host")
     if "?" in endpoint or "#" in endpoint:
         raise ActionFailure("Use query parameters instead of including them in the endpoint")
-
-    parts = endpoint.strip("/").split("/")
-    if len(parts) != 4 or parts[:2] != ["geoip", "v2.1"]:
-        raise ActionFailure("Endpoint must be /geoip/v2.1/{country|city|insights}/{ip_address}")
-
-    service, ip_address = parts[2:]
-    if service not in SERVICES[web_service]:
-        allowed = ", ".join(sorted(SERVICES[web_service]))
-        raise ActionFailure(f"{web_service} supports these services: {allowed}")
-    if ip_address != "me":
-        try:
-            ipaddress.ip_address(ip_address)
-        except ValueError as exc:
-            raise ActionFailure("Endpoint must contain a valid IP address or 'me'") from exc
-    return f"/{'/'.join(parts)}"
+    return f"/{endpoint.lstrip('/')}"
 
 
 def _headers(value: str | None) -> dict[str, str]:
@@ -88,25 +75,23 @@ def _query_parameters(value: str | None) -> dict | str | None:
 
 
 def make_request(params: MaxMindMakeRequestParams, asset: Asset) -> MakeRequestOutput:
-    """Make a live, authenticated GeoIP or GeoLite web-service request."""
+    """Make an authenticated request to an endpoint on the configured MaxMind host."""
     if not asset.account_id or not asset.license_key:
         raise ActionFailure("Account ID and license key are required for Make Request")
-    if params.http_method != "GET":
-        raise ActionFailure("MaxMind GeoIP web-service requests must use GET")
-    if params.body:
-        raise ActionFailure("MaxMind GeoIP web-service requests do not accept a request body")
     if params.timeout is not None and params.timeout <= 0:
         raise ActionFailure("Timeout must be greater than zero")
 
-    web_service, base_url = web_service_base_url(asset.web_service)
-    endpoint = _endpoint(params.endpoint, web_service)
+    _, base_url = web_service_base_url(asset.web_service)
+    endpoint = _endpoint(params.endpoint)
 
     try:
-        response = requests.get(
-            base_url + endpoint,
+        response = requests.request(
+            method=params.http_method,
+            url=base_url + endpoint,
             auth=(asset.account_id, asset.license_key),
             headers=_headers(params.headers),
             params=_query_parameters(params.query_parameters),
+            data=params.body or None,
             timeout=params.timeout or DEFAULT_TIMEOUT,
             verify=params.verify_ssl,
         )
