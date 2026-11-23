@@ -15,6 +15,7 @@
 """Read and safely update the bundled MaxMind City database."""
 
 import ipaddress
+import json
 import os
 import tarfile
 import tempfile
@@ -54,21 +55,36 @@ def redact(message: object, key: str) -> str:
     return value
 
 
-def check_newer(key: str, state: dict) -> bool:
-    response = requests.head(license_url(key), timeout=TIMEOUT)
+def _file_identity(path: Path) -> list[int]:
+    stat = path.stat()
+    return [stat.st_dev, stat.st_ino, stat.st_size, stat.st_mtime_ns]
+
+
+def _installed_timestamp(marker_path: Path, db_path: Path) -> float | None:
+    try:
+        marker = json.loads(marker_path.read_text(encoding="utf-8"))
+        if marker["file"] == _file_identity(db_path):
+            return float(marker["last_modified"])
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    return None
+
+
+def check_newer(key: str, db_path: Path = DB_PATH) -> bool:
+    response = requests.head(license_url(key), allow_redirects=True, timeout=TIMEOUT)
     if response.status_code != 200:
         raise ActionFailure(f"Failed to check if the database is up-to-date. Status code: {response.status_code}. Error: {response.content!r}")
-    server_time = response.headers["last-modified"]
-    previous_time = state.get("db_last_modified_time")
-    return not previous_time or parsedate_to_datetime(server_time) > parsedate_to_datetime(previous_time)
+    server_time = parsedate_to_datetime(response.headers["last-modified"]).timestamp()
+    installed_time = _installed_timestamp(db_path.with_suffix(".mmdb.last-modified"), db_path)
+    return installed_time is None or server_time > installed_time
 
 
-def download_and_replace(key: str, state: dict, db_path: Path = DB_PATH) -> dict[str, str]:
-    """Validate a downloaded MMDB before replacing the active file and checkpoint."""
+def download_and_replace(key: str, db_path: Path = DB_PATH) -> dict[str, str]:
+    """Install a validated City database and record its download timestamp."""
     with requests.get(license_url(key), stream=True, timeout=TIMEOUT) as response:
         if response.status_code != 200:
             raise ActionFailure(f"Failed to download database. Status Code: {response.status_code}. Error: {response.content!r}")
-        last_modified = response.headers["last-modified"]
+        last_modified = parsedate_to_datetime(response.headers["last-modified"]).timestamp()
         headers = dict(response.headers)
         with tempfile.TemporaryDirectory(dir=db_path.parent) as temporary_dir:
             archive_path = Path(temporary_dir) / "city.tar.gz"
@@ -86,10 +102,16 @@ def download_and_replace(key: str, state: dict, db_path: Path = DB_PATH) -> dict
                 with member_file, candidate_path.open("wb") as output:
                     while chunk := member_file.read(128 * 1024):
                         output.write(chunk)
-            with geoip2.database.Reader(str(candidate_path)):
-                pass
+            with geoip2.database.Reader(str(candidate_path)) as reader:
+                if reader.metadata().database_type != "GeoLite2-City":
+                    raise ActionFailure("Downloaded database is not a GeoLite2-City database")
+
+            # The timestamp describes this file, independently of the SDK poll transaction.
+            # A missing marker or a mismatched file (including after an upgrade) forces a refresh.
+            candidate_marker = Path(temporary_dir) / "last-modified"
+            candidate_marker.write_text(json.dumps({"file": _file_identity(candidate_path), "last_modified": last_modified}), encoding="utf-8")
             os.replace(candidate_path, db_path)
-    state["db_last_modified_time"] = last_modified
+            os.replace(candidate_marker, db_path.with_suffix(".mmdb.last-modified"))
     return headers
 
 

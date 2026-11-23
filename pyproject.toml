@@ -5,7 +5,11 @@ description = "This app provides IP geolocation with the included MaxMind databa
 license = "Copyright (c) 2016-2026 Splunk Inc."
 requires-python = ">=3.13,<3.14"
 authors = [{ name = "Brady Davis" }]
-dependencies = ["splunk-soar-sdk==7.1.3", "geoip2==5.1.0", "requests>=2.32,<3"]
+dependencies = [
+    "splunk-soar-sdk==7.3.0",
+    "geoip2==5.1.0",
+    "requests>=2.32,<3",
+]
 
 [tool.soar.app]
 main_module = "src.app:app"

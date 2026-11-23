@@ -48,9 +48,24 @@ and stay within the daily MaxMind download limit. As of September 14, 2021, each
 up to 2,000 total downloads in each 24 hour period. For more info, visit
 [here](https://support.maxmind.com/geoip-faq/databases-and-database-updates/is-there-a-limit-to-how-often-i-can-download-a-database-from-my-maxmind-account/)
 
+The first poll after an upgrade may refresh the bundled database if its download timestamp cannot be
+verified. On Poll returns poll status. Use Update Data if you need the download response headers.
+
 It's recommended to run the database update every 30 days. The schedule of the database update can
 be found
 [here](https://support.maxmind.com/geoip-faq/databases-and-database-updates/how-often-should-i-purchase-geoip2-or-geoip-legacy-database-updates/)
+
+## Make Request
+
+Make Request sends the chosen HTTP method and relative path to the MaxMind web-service host
+selected on the asset. City and Country lookups are GET examples. MaxMind determines which methods
+each endpoint supports. The action requires verified TLS and returns redirect responses without
+following them.
+
+## Test Connectivity
+
+If the connectivity IP is unset, empty, or null, the app uses `8.8.8.8`. Enter a valid IPv4 or IPv6
+address to test with a different IP.
 
 ### Configuration variables
 
@@ -112,7 +127,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **query_parameters** | optional | Parameters to append to the URL (JSON object or query string). An example is ?key=value&key2=value2 | string | |
 **body** | optional | The body to send with the request (JSON object). An example is {'key': 'value', 'key2': 'value2'} | string | |
 **timeout** | optional | The timeout for the request in seconds. | numeric | |
-**verify_ssl** | optional | Whether to verify the SSL certificate. Default is True. | boolean | |
+**verify_ssl** | optional | TLS certificate verification is required. Use true or omit this parameter. | boolean | |
 
 #### Action Output
 

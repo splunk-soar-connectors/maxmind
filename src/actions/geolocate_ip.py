@@ -16,7 +16,7 @@
 
 import geoip2.errors
 from soar_sdk.abstract import SOARClient
-from soar_sdk.action_results import ActionOutput, OutputField
+from soar_sdk.action_results import ActionOutput, ActionResult, OutputField
 from soar_sdk.exceptions import ActionFailure
 from soar_sdk.params import Param, Params
 
@@ -24,9 +24,14 @@ from ..database import lookup, validate_ip
 
 
 class SparseGeoOutput(ActionOutput):
+    def __init__(self, **data):
+        super().__init__(**data)
+        # ActionOutput fills omitted optional fields with None during validation.
+        self.model_fields_set.intersection_update(data)
+
     def model_dump(self, **kwargs):
-        # The legacy connector omits unavailable GeoIP fields from data and summaries.
-        kwargs["exclude_none"] = True
+        # Unavailable fields are omitted unless legacy explicitly emitted them as null.
+        kwargs["exclude_unset"] = True
         return super().model_dump(**kwargs)
 
 
@@ -72,38 +77,51 @@ def _details(response) -> tuple[dict, dict]:
             value = getattr(section_value, source, None)
             if value is not None:
                 data[target] = value
+    if "country_name" not in data:
+        data.pop("country_iso_code", None)
     subdivisions = getattr(response, "subdivisions", None)
     if subdivisions and len(subdivisions):
         subdivision = subdivisions.most_specific
-        if subdivision.name is not None:
-            data["state_name"] = subdivision.name
-        if subdivision.iso_code is not None:
-            data["state_iso_code"] = subdivision.iso_code
+        data["state_name"] = subdivision.name
+        data["state_iso_code"] = subdivision.iso_code
     for key, field in (("city_name", "city"), ("state_iso_code", "state"), ("country_name", "country")):
         if key in data:
             summary[field] = data[key]
     return data, summary
 
 
-def geolocate_ip(params: GeolocateIpParams, soar: SOARClient) -> list[GeoOutput]:
-    # The SDK converts each returned output model into a separate action result.
+def _lookup_ip(ip: str) -> tuple[GeoOutput, GeoSummary, str]:
+    try:
+        response = lookup(ip)
+    except geoip2.errors.AddressNotFoundError:
+        return GeoOutput(), GeoSummary(), "IP not found"
+    data, summary = _details(response)
+    return GeoOutput(**data), GeoSummary(**summary), ""
+
+
+def geolocate_ip(params: GeolocateIpParams, soar: SOARClient):
+    """Return typed location data, with independent legacy result metadata for IP lists."""
     ips = [part.strip() for part in params.ip.split(",")]
     if any(not validate_ip(ip) for ip in ips):
         raise ActionFailure("Please provide a valid IP Address")
+    if len(ips) == 1:
+        output, summary, message = _lookup_ip(ips[0])
+        soar.set_summary(summary)
+        soar.set_message(message)
+        return output
+
+    # With typed outputs alone the SDK uses one shared parameter, summary and message for every row.
+    # Use ActionResult only for batches so each IP has its own metadata and failures keep other rows.
     results = []
     for ip in ips:
-        summary = {}
+        param = {"ip": ip}
         try:
-            response = lookup(ip)
-        except geoip2.errors.AddressNotFoundError:
-            # The legacy lookup returns a successful empty row for an address outside the database.
-            output = GeoOutput()
-            if len(ips) == 1:
-                soar.set_message("IP not found")
+            output, summary, message = _lookup_ip(ip)
+        except Exception as exc:
+            result = ActionResult(status=False, message=f"Failed to geolocate IP {ip}: {exc}", param=param)
         else:
-            data, summary = _details(response)
-            output = GeoOutput(**data)
-            if len(ips) == 1:
-                soar.set_summary(GeoSummary(**summary))
-        results.append(output)
+            result = ActionResult(status=True, message=message, param=param)
+            result.add_data(output.model_dump(by_alias=True))
+            result.set_summary(summary.model_dump(by_alias=True))
+        results.append(result)
     return results

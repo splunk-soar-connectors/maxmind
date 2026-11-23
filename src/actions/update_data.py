@@ -16,6 +16,7 @@
 
 from soar_sdk.abstract import SOARClient
 from soar_sdk.action_results import ActionResult, OutputField, PermissiveActionOutput
+from soar_sdk.exceptions import ActionFailure
 from soar_sdk.params import Params
 
 from ..asset import Asset
@@ -45,7 +46,9 @@ class UpdateOutput(PermissiveActionOutput):
 def update_data(params: Params, asset: Asset, soar: SOARClient):
     key = asset.license_key or ""
     try:
-        headers = download_and_replace(key, asset.ingest_state)
+        if not key.strip():
+            raise ActionFailure("License key is required to fetch MaxMind database.")
+        headers = download_and_replace(key)
     except Exception as exc:
         result = ActionResult(False, f"Error in downloading or replacing database. {redact(exc, key)}")
         result.add_data({})

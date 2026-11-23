@@ -5,3 +5,4 @@ __pycache__/
 .ruff_cache/
 *.pyc
 *.tgz
+templates/data/*.mmdb.last-modified

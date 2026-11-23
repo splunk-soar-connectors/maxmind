@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Preserve legacy widget metadata not exposed by SDK 7.1.3."""
+"""Preserve legacy widget metadata not exposed by the SDK metadata model."""
 
 from soar_sdk.meta.actions import ActionMeta
 
@@ -43,13 +43,15 @@ class UpdateTableActionMeta(ActionMeta):
     def model_dump(self, *args, **kwargs):
         data = super().model_dump(*args, **kwargs)
         data["render"] = {"type": "table", "width": 12, "height": 5, "title": "Update Database"}
+        columns = {"action_result.status": ("Status", 0), "action_result.message": ("Message", 1)}
+        for field in data["output"]:
+            if field["data_path"] in columns:
+                field["column_name"], field["column_order"] = columns[field["data_path"]]
         return data
 
 
 def preserve_render_metadata(app) -> None:
-    # Pydantic creates model_fields dynamically; getattr keeps static analysis accurate.
-    field_names = getattr(ActionMeta, "model_fields")
     for identifier, meta_class in (("lookup_ip", MapActionMeta), ("update_database", UpdateTableActionMeta)):
         action = app.actions_manager.get_action(identifier)
-        values = {name: getattr(action.meta, name) for name in field_names}
-        action.meta = meta_class(**values)
+        # Copy model fields before serialization so the parameter and output classes stay intact.
+        action.meta = meta_class(**vars(action.meta))

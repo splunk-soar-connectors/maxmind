@@ -33,6 +33,9 @@ class MaxMindMakeRequestParams(MakeRequestParams):
         description="Path on the configured MaxMind web-service host, for example /geoip/v2.1/city/8.8.8.8",
         required=True,
     )
+    verify_ssl: bool = Param(
+        description="TLS certificate verification is required. Use true or omit this parameter.", required=False, default=True
+    )
 
 
 def _endpoint(value: str) -> str:
@@ -78,6 +81,8 @@ def make_request(params: MaxMindMakeRequestParams, asset: Asset) -> MakeRequestO
     """Make an authenticated request to an endpoint on the configured MaxMind host."""
     if not asset.account_id or not asset.license_key:
         raise ActionFailure("Account ID and license key are required for Make Request")
+    if not params.verify_ssl:
+        raise ActionFailure("TLS certificate verification is required for Make Request")
     if params.timeout is not None and params.timeout <= 0:
         raise ActionFailure("Timeout must be greater than zero")
 
@@ -93,7 +98,7 @@ def make_request(params: MaxMindMakeRequestParams, asset: Asset) -> MakeRequestO
             params=_query_parameters(params.query_parameters),
             data=params.body or None,
             timeout=params.timeout or DEFAULT_TIMEOUT,
-            verify=params.verify_ssl,
+            allow_redirects=False,
         )
     except requests.RequestException as exc:
         raise ActionFailure(f"Request failed: {exc}") from exc

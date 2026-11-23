@@ -31,16 +31,11 @@ logger = getLogger()
 
 def run_on_poll(params: OnPollParams, asset: Asset) -> Iterator[Container]:
     key = asset.license_key or ""
-    if not key:
+    if not key.strip():
         raise ActionFailure("License key is required to fetch MaxMind database.")
-    state = asset.ingest_state
-    if "db_last_modified_time" not in state:
-        legacy = state.backend.load_state() or {}
-        if legacy.get("db_last_modified_time"):
-            state["db_last_modified_time"] = legacy["db_last_modified_time"]
     try:
-        if check_newer(key, state):
-            download_and_replace(key, state)
+        if check_newer(key):
+            download_and_replace(key)
             if params.container_count and int(params.container_count) != MAX_COUNT_VALUE:
                 logger.progress("Successfully updated the database to the latest version")
         else:
@@ -48,4 +43,4 @@ def run_on_poll(params: OnPollParams, asset: Asset) -> Iterator[Container]:
     except Exception as exc:
         raise ActionFailure(f"Failed to poll. Reason: {redact(exc, key)}") from exc
     name = f"maxmind_ingestion_{datetime.now(UTC):%Y-%m-%dT%H:%M:%SZ}"
-    yield Container(name=name, run_automation=True)
+    yield Container(name=name)
