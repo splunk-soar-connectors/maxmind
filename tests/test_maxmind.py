@@ -68,6 +68,17 @@ def test_geolocate_multiple_ips_keeps_individual_metadata():
     assert results[1].get_data() == [{}]
 
 
+@pytest.mark.parametrize("ip", ["8.8.8.8,8.8.8.8", "8.8.8.8, 8.8.8.8"])
+def test_geolocate_duplicate_ips_returns_one_result(ip):
+    with patch("src.actions.geolocate_ip.lookup", wraps=lookup) as lookup_mock:
+        results = run_action("lookup_ip", {"ip": ip})
+
+    assert len(results) == 1
+    assert results[0].get_status()
+    assert results[0].get_param()["ip"] == "8.8.8.8"
+    lookup_mock.assert_called_once_with("8.8.8.8")
+
+
 def test_single_ip_returns_declared_model_without_missing_fields():
     output = geolocate_ip(GeolocateIpParams(ip="8.8.8.8"), Mock())
     assert isinstance(output, GeoOutput)

@@ -101,10 +101,12 @@ def _lookup_ip(ip: str) -> tuple[GeoOutput, GeoSummary, str]:
 
 def geolocate_ip(params: GeolocateIpParams, soar: SOARClient):
     """Return typed location data, with independent legacy result metadata for IP lists."""
-    ips = [part.strip() for part in params.ip.split(",")]
+    input_ips = [part.strip() for part in params.ip.split(",")]
+    is_ip_list = len(input_ips) > 1
+    ips = list(dict.fromkeys(input_ips))
     if any(not validate_ip(ip) for ip in ips):
         raise ActionFailure("Please provide a valid IP Address")
-    if len(ips) == 1:
+    if len(ips) == 1 and not is_ip_list:
         output, summary, message = _lookup_ip(ips[0])
         soar.set_summary(summary)
         soar.set_message(message)
